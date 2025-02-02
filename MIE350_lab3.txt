@@ -1,0 +1,17 @@
+Homework:
+1.
+SELECT p.FIRSTNAME, p.LASTNAME
+FROM PROFESSORS p
+JOIN COURSES c ON c.PROFESSORID = p.ID
+GROUP BY p.FIRSTNAME, p.LASTNAME
+HAVING COUNT(c.PROFESSORID) > 2;
+2.
+SELECT CONCAT(s.firstname, ' ', s.lastname) AS StudentName , AVG(m.mark)
+FROM Students s
+JOIN Marks m ON m.studentId = s.id
+GROUP BY s.firstname, s.lastname
+3.
+SELECT c.code, AVG(m.mark)
+FROM Marks m
+JOIN Courses c ON m.courseCode = c.code
+GROUP BY c.code
