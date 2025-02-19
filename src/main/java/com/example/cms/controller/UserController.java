@@ -27,18 +27,18 @@ public class UserController {
     }
 
     @GetMapping("/users/{userId}")
-    public User getUserById(@PathVariable Long userId) {
+    public User getUserById(@PathVariable String userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
     }
 
     @GetMapping("/user/{userId}/{email}")
-    public Boolean getUserIdAndEmail(@PathVariable Long userId, @PathVariable String email) {
+    public Boolean getUserIdAndEmail(@PathVariable String userId, @PathVariable String email) {
         return userRepository.checkUniqueUser(userId, email) != null;
     }
 
     @PutMapping("/users/{password}")
-    public User updateUserPassword(@RequestBody UserDto userDto, @PathVariable("userId") Long userId) {
+    public User updateUserPassword(@RequestBody UserDto userDto, @PathVariable("userId") String userId) {
         return userRepository.findById(userId)
                 .map(user -> {
                     user.setPassword(userDto.getPassword());
@@ -55,7 +55,7 @@ public class UserController {
     }
 
     @PutMapping("/users/{email}")
-    public User updateUserEmail(@RequestBody UserDto userDto, @PathVariable("userId") Long userId) {
+    public User updateUserEmail(@RequestBody UserDto userDto, @PathVariable("userId") String userId) {
         return userRepository.findById(userId)
                 .map(user -> {
                     user.setEmail(userDto.getEmail());
@@ -72,7 +72,7 @@ public class UserController {
     }
 
     @PutMapping("/users/{name}")
-    public User updateUserName(@RequestBody UserDto userDto, @PathVariable("userId") Long userId) {
+    public User updateUserName(@RequestBody UserDto userDto, @PathVariable("userId") String userId) {
         return userRepository.findById(userId)
                 .map(user -> {
                     user.setName(userDto.getName());
@@ -100,7 +100,7 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
-    public void deleteUser(@PathVariable Long userId) {
+    public void deleteUser(@PathVariable String userId) {
         userRepository.deleteById(userId);
     }
 
