@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
-public class LoginController {
+public class LoginSignupController {
 
     @Autowired
     private UserRepository userRepository;
@@ -16,7 +16,7 @@ public class LoginController {
     @Autowired
     private ProductRepository productRepository;
 
-    public LoginController(UserRepository userRepository) {
+    public LoginSignupController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

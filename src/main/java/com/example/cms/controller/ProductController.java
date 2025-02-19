@@ -1,4 +1,4 @@
-package com.example.cms.controller.exceptions;
+package com.example.cms.controller;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
