@@ -1,4 +1,4 @@
-package com.example.cms.controller.exceptions;
+package com.example.cms.controller;
 
 import com.example.cms.model.repository.ProductRepository;
 import com.example.cms.model.repository.UserRepository;
@@ -15,5 +15,9 @@ public class LoginController {
 
     @Autowired
     private ProductRepository productRepository;
+
+    public LoginController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
 }
