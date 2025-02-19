@@ -19,7 +19,7 @@ public class User {
     @Id
     @NotNull
     // not sure if this is needed
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment userId
+//    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment userId
     private long userId;
 
     @NotEmpty
