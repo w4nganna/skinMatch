@@ -17,10 +17,10 @@ import javax.validation.constraints.NotNull;
 public class User {
 
     @Id
-    @NotNull
+    @NotEmpty
     // not sure if this is needed
 //    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment userId
-    private long userId;
+    private String userId;
 
     @NotEmpty
     @Column(name = "name", nullable = false)
@@ -36,7 +36,7 @@ public class User {
     private String password;
 
 
-    public User(long userId, String name, String email, String password) {
+    public User(String userId, String name, String email, String password) {
         this.userId = userId;
         this.name = name;
         this.email = email;
