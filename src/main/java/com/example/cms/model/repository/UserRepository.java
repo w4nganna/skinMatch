@@ -7,15 +7,19 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query(value = "SELECT * FROM Users u " +
+    @Query(value = "SELECT u.userId, u.email FROM Users u " +
                     "WHERE u.userId = :userId", nativeQuery = true)
-    User findByUserId(@Param("userId") Long userId);
+    List<User> getUserIdAndEmail(@Param("userId") Long userId, @Param("email") String email);
 
-    @Query(value = "SELECT * FROM Users", nativeQuery = true)
-    List<User> findAll();
+    @Query(value =  "SELECT * FROM Users " +
+                    "WHERE userId = :userId " +
+                    "OR email = :email", nativeQuery = true)
+    List<User> checkUniqueUser(@Param("userId") Long userId, @Param("email") String email);
+
 
 }
