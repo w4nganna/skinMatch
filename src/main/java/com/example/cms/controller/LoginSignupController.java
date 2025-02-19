@@ -42,11 +42,11 @@ public class LoginSignupController {
         }
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestParam String userId, @RequestParam String password) {
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(@RequestBody UserDto userDto) {
         try {
-            User user = userController.getUserById(userId);  // Attempt to fetch user
-            if (user.getPassword().equals(password)) {
+            User user = userController.getUserById(userDto.getUserId());  // Attempt to fetch user
+            if (user.getPassword().equals(userDto.getPassword())) {
                 return ResponseEntity.ok("Login successful");
             } else {
                 return ResponseEntity.badRequest().body("Login failed: Incorrect password");
