@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @NoArgsConstructor
@@ -18,13 +19,8 @@ public class User {
 
     @Id
     @NotEmpty
-    // not sure if this is needed
-//    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment userId
+    //  @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment userId
     private String userId;
-
-    @NotEmpty
-    @Column(name = "name", nullable = false)
-    private String name;
 
     @NotEmpty
     @Email // Ensures valid email format
@@ -35,10 +31,13 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "testResultsId")
+    @JsonIgnore //Prevent recursion issues - Don't return test results when getting user
+    private TestResults testResults;
 
-    public User(String userId, String name, String email, String password) {
+    public User(String userId, String email, String password) {
         this.userId = userId;
-        this.name = name;
         this.email = email;
         this.password = password;
     }

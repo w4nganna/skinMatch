@@ -5,8 +5,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -34,19 +38,28 @@ public class Product {
     private String category;
 
     @NotEmpty
-    private String texture;
-
-    @NotEmpty
     private String type;
 
+    // Many-to-Many relationship with TestResults
+    @ManyToMany(mappedBy = "recommendedProducts")
+    private List<TestResults> testResults  = new ArrayList<>();
+
+    //Many-to-Many relationship with Ingredients
+    @ManyToMany
+    @JoinTable(
+            name = "ProductIngredients",
+            joinColumns = @JoinColumn(name = "productId"),
+            inverseJoinColumns = @JoinColumn(name = "ingredientId")
+    )
+    private List<Ingredient> ingredients  = new ArrayList<>();
+
     public Product(long productId, String name, String brand, Double price,
-                   String category, String texture, String type) {
+                   String category, String type) {
         this.productId = productId;
         this.name = name;
         this.brand = brand;
         this.price = price;
         this.category = category;
-        this.texture = texture;
         this.type = type;
 
     }

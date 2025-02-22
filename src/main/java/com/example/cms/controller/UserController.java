@@ -47,7 +47,6 @@ public class UserController {
                 .orElseGet(() -> {
                     User newUser = new User();
                     newUser.setUserId(userId);
-                    newUser.setName(userDto.getName());
                     newUser.setPassword(userDto.getPassword());
                     newUser.setEmail(userDto.getEmail());
                     return userRepository.save(newUser);
@@ -64,24 +63,6 @@ public class UserController {
                 .orElseGet(() -> {
                     User newUser = new User();
                     newUser.setUserId(userId);
-                    newUser.setName(userDto.getName());
-                    newUser.setPassword(userDto.getPassword());
-                    newUser.setEmail(userDto.getEmail());
-                    return userRepository.save(newUser);
-                });
-    }
-
-    @PutMapping("/users/{name}")
-    public User updateUserName(@RequestBody UserDto userDto, @PathVariable("userId") String userId) {
-        return userRepository.findById(userId)
-                .map(user -> {
-                    user.setName(userDto.getName());
-                    return userRepository.save(user);
-                })
-                .orElseGet(() -> {
-                    User newUser = new User();
-                    newUser.setUserId(userId);
-                    newUser.setName(userDto.getName());
                     newUser.setPassword(userDto.getPassword());
                     newUser.setEmail(userDto.getEmail());
                     return userRepository.save(newUser);
@@ -92,7 +73,6 @@ public class UserController {
     public User createUser(@RequestBody UserDto userDto) {
         User newUser = new User();
         newUser.setUserId(userDto.getUserId());
-        newUser.setName(userDto.getName());
         newUser.setPassword(userDto.getPassword());
         newUser.setEmail(userDto.getEmail());
 
