@@ -36,13 +36,13 @@ public class TestResults {
     )
     private List<Product> recommendedProducts;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "userSkincareConcerns",
-//            joinColumns = @JoinColumn(name = "testResultId"),
-//            inverseJoinColumns = @JoinColumn(name = "concernId")
-//    )
-//    private List<Concern> concerns;
+    @ManyToMany
+    @JoinTable(
+            name = "userSkincareConcerns",
+            joinColumns = @JoinColumn(name = "testResultId"),
+            inverseJoinColumns = @JoinColumn(name = "concernId")
+    )
+    private List<Concern> concerns;
 
     // Many-to-Many relationship with Ingredients
     @ManyToMany
@@ -59,6 +59,6 @@ public class TestResults {
 
     // User's skin type (oily, dry, combination)
     @NotNull
-    private String skinType;
+    private int skinType;
 
 }

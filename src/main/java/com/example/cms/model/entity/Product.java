@@ -41,7 +41,7 @@ public class Product {
     private String type;
 
     // Many-to-Many relationship with TestResults
-    @ManyToMany(mappedBy = "recommendedProducts")
+    @ManyToMany(mappedBy = "concerns")
     private List<TestResults> testResults  = new ArrayList<>();
 
     //Many-to-Many relationship with Ingredients
@@ -52,6 +52,15 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "ingredientId")
     )
     private List<Ingredient> ingredients  = new ArrayList<>();
+
+    //Many-to-Many relationship with Concerns
+    @ManyToMany
+    @JoinTable(
+            name = "userSkincareConcerns",
+            joinColumns = @JoinColumn(name = "testResultId"),
+            inverseJoinColumns = @JoinColumn(name = "concernId")
+    )
+    private List<Concern> concerns;
 
     public Product(long productId, String name, String brand, Double price,
                    String category, String type) {
