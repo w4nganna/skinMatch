@@ -34,7 +34,7 @@ public class TestResults {
             joinColumns = @JoinColumn(name = "testResultId"),
             inverseJoinColumns = @JoinColumn(name = "productId")
     )
-    private List<Product> recommendedProducts;
+    private List<Product> recommendedProducts = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -42,7 +42,7 @@ public class TestResults {
             joinColumns = @JoinColumn(name = "testResultId"),
             inverseJoinColumns = @JoinColumn(name = "concernId")
     )
-    private List<Concern> concerns;
+    private List<Concern> concerns = new ArrayList<>();
 
     // Many-to-Many relationship with Ingredients
     @ManyToMany
