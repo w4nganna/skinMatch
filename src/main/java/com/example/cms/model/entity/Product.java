@@ -41,7 +41,7 @@ public class Product {
     private String type;
 
     // Many-to-Many relationship with TestResults
-    @ManyToMany(mappedBy = "concerns")
+    @ManyToMany(mappedBy = "recommendedProducts")
     private List<TestResults> testResults  = new ArrayList<>();
 
     //Many-to-Many relationship with Ingredients
