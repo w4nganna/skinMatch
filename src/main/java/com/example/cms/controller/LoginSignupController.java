@@ -8,6 +8,7 @@ import com.example.cms.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -24,13 +25,15 @@ public class LoginSignupController {
         this.userController = userController;
     }
 
+    //-------------------Get------------------
     // check user data before passing the sign up
     @GetMapping("/signup/{userId}/{email}")
-    public Boolean checkUser(@PathVariable String userId, @PathVariable String email) {
-        // return true if found user, so frontend know to let user rename the userid or change email
-        return userController.getUserIdAndEmail(userId, email);
+    public ResponseEntity<Boolean> isValidUserEmail(@PathVariable String userId, @PathVariable String email) {
+        // If no user with matching userId or email exists, return true (valid user)
+        return ResponseEntity.ok(!userRepository.existsByUserIdOrEmail(userId, email));
     }
 
+    //-------------------Post------------------
     @PostMapping("/signup")
     public ResponseEntity<String> signupUser(@RequestBody UserDto userDto) {
         boolean createSuccessful = userController.createUser(userDto) != null;
@@ -55,12 +58,5 @@ public class LoginSignupController {
             return ResponseEntity.badRequest().body("Login failed: User not found");
         }
     }
-
-
-
-
-
-
-
 
 }

@@ -5,6 +5,7 @@ import com.example.cms.controller.exceptions.UserNotFoundException;
 import com.example.cms.model.entity.User;
 import com.example.cms.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Null;
@@ -21,6 +22,7 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
+    //-------------------Get------------------
     @GetMapping("/users")
     public List<User> getUsers() {
         return userRepository.findAll();
@@ -32,11 +34,27 @@ public class UserController {
                 .orElseThrow(() -> new UserNotFoundException(userId));
     }
 
-    @GetMapping("/user/{userId}/{email}")
-    public Boolean getUserIdAndEmail(@PathVariable String userId, @PathVariable String email) {
-        return userRepository.checkUniqueUser(userId, email) != null;
+    // Check if userId is unique
+    @GetMapping("/signup/userId/{userId}")
+    public Boolean isUserIdUnique(@PathVariable String userId) {
+        // Return false if the userId already exists
+        return !userRepository.usernameExists(userId);
     }
 
+    // Check if email is unique
+    @GetMapping("/signup/email/{email}")
+    public ResponseEntity<Boolean> isEmailUnique(@PathVariable String email) {
+        return ResponseEntity.ok(!userRepository.emailExists(email));
+    }
+
+    //Not needed? Can directly call in login controller
+//    @GetMapping("/user/{userId}/{email}")
+//    public Boolean isUniqueUserEmail(@PathVariable String userId, @PathVariable String email) {
+//        // Check if no user with the same ID or email exists
+//        return userRepository.existsByUserIdOrEmail(userId, email);
+//    }
+
+    //-------------------Put------------------
     @PutMapping("/users/{password}")
     public User updateUserPassword(@RequestBody UserDto userDto, @PathVariable("userId") String userId) {
         return userRepository.findById(userId)
@@ -69,6 +87,7 @@ public class UserController {
                 });
     }
 
+    //-------------------Post------------------
     @PostMapping("/users")
     public User createUser(@RequestBody UserDto userDto) {
         User newUser = new User();
@@ -79,6 +98,7 @@ public class UserController {
         return userRepository.save(newUser);
     }
 
+    //-------------------Delete------------------
     @DeleteMapping("/users/{id}")
     public void deleteUser(@PathVariable String userId) {
         userRepository.deleteById(userId);
