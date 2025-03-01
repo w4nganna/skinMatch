@@ -40,6 +40,9 @@ public class Product {
     @NotEmpty
     private String type;
 
+    @NotEmpty
+    private String imageURL;
+
     // Many-to-Many relationship with TestResults
     @ManyToMany(mappedBy = "recommendedProducts")
     private List<TestResults> testResults  = new ArrayList<>();
