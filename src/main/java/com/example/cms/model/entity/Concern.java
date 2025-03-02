@@ -33,7 +33,7 @@ public class Concern {
     private List<TestResults> testResults  = new ArrayList<>();
 
     // Many-to-Many relationship with Product
-    @ManyToMany(mappedBy = "concerns")
+    @ManyToMany(mappedBy = "skintypes")
     private List<Product> products  = new ArrayList<>();
 
     public Concern(int id, String description)

@@ -65,6 +65,15 @@ public class Product {
     )
     private List<Concern> concerns;
 
+    //Many-to-Many relationship with Skintype
+    @ManyToMany
+    @JoinTable(
+            name = "userSkintype",
+            joinColumns = @JoinColumn(name = "testResultId"),
+            inverseJoinColumns = @JoinColumn(name = "skintypeId")
+    )
+    private List<Skintype> skintypes;
+
     public Product(long productId, String name, String brand, Double price,
                    String category, String type) {
         this.productId = productId;

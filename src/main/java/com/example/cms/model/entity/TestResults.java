@@ -58,7 +58,8 @@ public class TestResults {
     private Float budget;
 
     // User's skin type (oily, dry, combination)
-    @NotNull
-    private int skinType;
+    @ManyToOne
+    @JoinColumn(name="skintypeId", nullable = false)
+    private Skintype skinType;
 
 }
