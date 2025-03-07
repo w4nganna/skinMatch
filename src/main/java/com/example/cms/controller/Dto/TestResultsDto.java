@@ -14,6 +14,8 @@ public class TestResultsDto {
     private Float budget;
     private Skintype skinType;
     private List<Ingredient> avoidIngredients;
-    //private List<Concern> concerns;
+    private List<Concern> concerns;
+    private List<Product> recommendedProducts;
     private String user;
+    private Long testResultId;
 }

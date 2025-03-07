@@ -62,4 +62,14 @@ public class TestResults {
     @JoinColumn(name="skintypeId", nullable = false)
     private Skintype skinType;
 
+    public TestResults(Long testResultId, User user, List<Product> recommendedProducts, List<Concern> concerns,
+                       List<Ingredient> avoidIngredients, Float budget, Skintype skinType) {
+        this.testResultId = testResultId;
+        this.recommendedProducts = recommendedProducts;
+        this.concerns = concerns;
+        this.avoidIngredients = avoidIngredients;
+        this.budget = budget;
+        this.skinType = skinType;
+    }
+
 }

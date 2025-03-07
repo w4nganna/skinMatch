@@ -24,3 +24,7 @@ INSERT INTO concerns(concernId, description) VALUES (6, 'dull skin');
 
 
 
+----------------testResults-----------------
+INSERT INTO testResults(testResultId, user, recommendedProducts, concerns, avoidIngredients, budget, skinType)
+VALUES (1);
+
