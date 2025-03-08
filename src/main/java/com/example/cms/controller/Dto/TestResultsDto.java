@@ -12,8 +12,8 @@ import java.util.List;
 @Setter
 public class TestResultsDto {
     private Float budget;
-    private Skintype skinType;
-    private List<Ingredient> avoidIngredients;
+    private Integer skinType;
+    private List<Long> avoidIngredients;
     //private List<Concern> concerns;
     private String user;
 }

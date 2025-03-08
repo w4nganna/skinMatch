@@ -24,7 +24,8 @@ public class User {
 
     @NotEmpty
     @Email // Ensures valid email format
-    @Column(name = "email", nullable = false, unique = true)
+    //Removed 'unique = true' to allow updating username (and we have FE validation for unique
+    @Column(name = "email", nullable = false)
     private String email;
 
     @NotEmpty

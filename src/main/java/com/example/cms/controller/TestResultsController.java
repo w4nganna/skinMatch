@@ -2,16 +2,18 @@ package com.example.cms.controller;
 
 import com.example.cms.controller.exceptions.UserNotFoundException;
 import com.example.cms.model.entity.TestResults;
-import com.example.cms.model.repository.TestResultsRepository;
+import com.example.cms.model.entity.Skintype;
+import com.example.cms.model.repository.*;
 import com.example.cms.controller.Dto.TestResultsDto;
 import com.example.cms.model.entity.User;
-import com.example.cms.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.cms.model.entity.Product;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @CrossOrigin
@@ -21,11 +23,15 @@ public class TestResultsController {
 
     private final TestResultsRepository testResultsRepository;
     private final UserRepository userRepository;
+    private final SkintypeRepository skintypeRepository;
+    private final IngredientRepository ingredientRepository;
 
     @Autowired
-    public TestResultsController(TestResultsRepository testResultsRepository, UserRepository userRepository) {
+    public TestResultsController(TestResultsRepository testResultsRepository, UserRepository userRepository, SkintypeRepository skintypeRepository, IngredientRepository ingredientRepository) {
         this.testResultsRepository = testResultsRepository;
         this.userRepository = userRepository;
+        this.skintypeRepository = skintypeRepository;
+        this.ingredientRepository = ingredientRepository;
     }
 
     //-------------------Get Mapping---------------
@@ -35,7 +41,7 @@ public class TestResultsController {
                 .orElseThrow(() -> new RuntimeException("TestResult not found with id: " + id));
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/users/{userId}")
     public TestResults getTestResultsForUser(@PathVariable String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
@@ -55,6 +61,14 @@ public class TestResultsController {
     @PostMapping("/")
     @Transactional
     public TestResults createTestResult(@RequestBody TestResultsDto testResultsDTO) {
+        /* Example body:
+        {
+            "skinType" : 1,
+            "avoidIngredients": [1,2],
+            "budget" : 20,
+            "user" : "00001"
+        }
+	*/
         //Fetch user from the database
         User user = userRepository.findById(testResultsDTO.getUser())
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + testResultsDTO.getUser()));
@@ -73,9 +87,16 @@ public class TestResultsController {
         //Set budget
         testResult.setBudget(testResultsDTO.getBudget());
         //Set skin type
-        testResult.setSkinType(testResultsDTO.getSkinType());
+        Skintype skintype = skintypeRepository.findById(testResultsDTO.getSkinType())
+                .orElseThrow(() -> new RuntimeException("Skintype not found with id: " + testResultsDTO.getSkinType()));;
+        testResult.setSkinType(skintype);
         //Set avoid ingredients
-        testResult.setAvoidIngredients(testResultsDTO.getAvoidIngredients());
+        testResult.setAvoidIngredients(
+                testResultsDTO.getAvoidIngredients().stream()
+                        .map(ingredientId -> ingredientRepository.findById(ingredientId)
+                                .orElseThrow(() -> new RuntimeException("Ingredient with ID " + ingredientId + " not found")))
+                        .collect(Collectors.toList())
+        );
 
         //-----------Call matching algorithm before saving--------
         matchingAlgorithm(testResult);//-------Placeholder for actual service!
@@ -118,7 +139,7 @@ public class TestResultsController {
         testResultsRepository.delete(testResult);
     }
 
-    @DeleteMapping("/user/{userId}")
+    @DeleteMapping("/users/{userId}")
     @Transactional
     public void deleteTestResult(@PathVariable String userId) {
         //Fetch the user from the database

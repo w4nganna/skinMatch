@@ -21,6 +21,7 @@ INSERT INTO concerns(concernId, description) VALUES (6, 'dull skin');
 
 
 ----------------Ingredients-----------------
-
+INSERT INTO ingredients (ingredientId, ingredientName) VALUES (1, 'Water');
+INSERT INTO ingredients (ingredientId, ingredientName) VALUES (2, 'Aloe Barbadensis Leaf Juice');
 
 

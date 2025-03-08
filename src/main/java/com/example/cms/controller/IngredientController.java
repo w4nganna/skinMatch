@@ -22,6 +22,11 @@ public class IngredientController {
         return repository.findAll();
     }
 
+    @GetMapping("/ingredients/{id}")
+    public Ingredient retrieveIngredientById(@PathVariable("id") Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ingredient with ID " + id + " not found"));
+    }
     //-------------------Post Mapping---------------
     @PostMapping("/ingredients")
     Ingredient createIngredient(@RequestBody Ingredient newIngredient) {

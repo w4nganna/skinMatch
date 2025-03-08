@@ -18,12 +18,11 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "skintypes")
-
 public class Skintype {
 
     @Id
     @NotNull
-    private int skintypeId;
+    private Integer skintypeId;
 
     @NotEmpty
     private String description;
