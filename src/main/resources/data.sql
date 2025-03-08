@@ -25,3 +25,7 @@ INSERT INTO ingredients (ingredientId, ingredientName) VALUES (1, 'Water');
 INSERT INTO ingredients (ingredientId, ingredientName) VALUES (2, 'Aloe Barbadensis Leaf Juice');
 
 
+----------------testResults-----------------
+INSERT INTO testResults(testResultId, user, recommendedProducts, concerns, avoidIngredients, budget, skinType)
+VALUES (1);
+
