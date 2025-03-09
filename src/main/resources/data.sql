@@ -26,6 +26,6 @@ INSERT INTO ingredients (ingredientId, ingredientName) VALUES (2, 'Aloe Barbaden
 
 
 ----------------testResults-----------------
-INSERT INTO testResults(testResultId, user, recommendedProducts, concerns, avoidIngredients, budget, skinType)
-VALUES (1);
+--INSERT INTO testResults(testResultId, user, recommendedProducts, concerns, avoidIngredients, budget, skinType)
+--VALUES (1);
 
