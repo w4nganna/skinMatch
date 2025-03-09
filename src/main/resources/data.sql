@@ -16,9 +16,11 @@ INSERT INTO concerns(concernId, description) VALUES (5, 'irritation');
 INSERT INTO concerns(concernId, description) VALUES (6, 'dull skin');
 
 ----------------Products-----------------
-
-
-
+INSERT INTO concerns(productId, description) VALUES (1, 'sunscreen');
+INSERT INTO concerns(productId, description) VALUES (2, 'cleanser');
+INSERT INTO concerns(productId, description) VALUES (3, 'toner');
+INSERT INTO concerns(productId, description) VALUES (4, 'moisturizer');
+INSERT INTO concerns(productId, description) VALUES (5, 'exfoliator');
 
 ----------------Ingredients-----------------
 INSERT INTO ingredients (ingredientId, ingredientName) VALUES (1, 'Water');
