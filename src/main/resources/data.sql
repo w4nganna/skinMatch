@@ -15,17 +15,11 @@ INSERT INTO concerns(concernId, description) VALUES (4, 'hyperpigmentation');
 INSERT INTO concerns(concernId, description) VALUES (5, 'irritation');
 INSERT INTO concerns(concernId, description) VALUES (6, 'dull skin');
 
-----------------Products-----------------
-
-
-
-
 ----------------Ingredients-----------------
 INSERT INTO ingredients (ingredientId, ingredientName) VALUES (1, 'Water');
 INSERT INTO ingredients (ingredientId, ingredientName) VALUES (2, 'Aloe Barbadensis Leaf Juice');
 
 
-----------------testResults-----------------
---INSERT INTO testResults(testResultId, user, recommendedProducts, concerns, avoidIngredients, budget, skinType)
---VALUES (1);
-
+----------------Products-----------------
+-- INSERT INTO products (productId, name, brand, price, category, type, imageURL)
+-- VALUES (1, 'ultra fluid', 'la roche posay', 30.50, 'sunscreen', 'dry', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s');
