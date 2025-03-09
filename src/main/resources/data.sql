@@ -89,6 +89,18 @@ INSERT INTO products (productId, name, brand, price, category, type, imageURL) V
                                                                                     'Moringa, Apple and Oats, Vitamin F.',
                                                                                     'https://example.com/farmacy-cleanser.jpg');
 
+INSERT INTO products (productId, name, brand, price, category, type, imageURL) VALUES
+                                                                                   (21, 'Natural Moisturizing Factors + HA', 'The Ordinary', 18.10, 'Moisturizer', 'Normal, Oily, Combination, Dry', 'image_url_here'),
+                                                                                   (22, 'Plum Plump Hyaluronic Acid Moisturizer', 'Glow Recipe', 54.00, 'Moisturizer', 'Normal, Dry, Combination, Oily', 'image_url_here'),
+                                                                                   (23, 'The Dewy Skin Cream', 'Tatcha', 97.00, 'Moisturizer', 'Normal, Dry', 'image_url_here'),
+                                                                                   (24, 'Ultra Repair Face Moisturizer', 'First Aid Beauty', 51.00, 'Moisturizer', 'Normal, Dry, Combination, Oily', 'image_url_here'),
+                                                                                   (25, 'Water Bank Blue Hyaluronic Cream Moisturizer', 'LANEIGE', 52.00, 'Moisturizer', 'Normal, Dry, Combination, Oily', 'image_url_here'),
+                                                                                   (26, 'Vitamin Enriched Face Base', 'Bobbi Brown', 34.00, 'Moisturizer', 'Normal, Oily, Combination', 'image_url_here'),
+                                                                                   (27, 'Lala Retro Whipped Cream', 'Drunk Elephant', 94.00, 'Moisturizer', 'Normal, Dry, Combination, Oily', 'image_url_here'),
+                                                                                   (28, 'Premier Cru The Cream', 'Caudalie', 155.00, 'Moisturizer', 'Normal, Dry, Combination', 'image_url_here'),
+                                                                                   (29, 'Squalane + Omega Repair Cream', 'Biossance', 81.00, 'Moisturizer', 'Normal, Dry, Combination', 'image_url_here'),
+                                                                                   (30, 'Moisturizing Cream', 'Cetaphil', 15.29, 'Moisturizer', 'Dry', 'image_url_here');
+
 
 ----------------Ingredients-----------------
 INSERT INTO ingredients (ingredientId, ingredientName) VALUES (1, 'Water');
