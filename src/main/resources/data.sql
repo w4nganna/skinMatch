@@ -16,11 +16,47 @@ INSERT INTO concerns(concernId, description) VALUES (5, 'irritation');
 INSERT INTO concerns(concernId, description) VALUES (6, 'dull skin');
 
 ----------------Products-----------------
---INSERT INTO products(productId, name, brand, price, category, imageURL, description) VALUES (1, 'sunscreen');
---INSERT INTO products(productId, description) VALUES (2, 'cleanser');
---INSERT INTO products(productId, description) VALUES (3, 'toner');
---INSERT INTO products(productId, description) VALUES (4, 'moisturizer');
---INSERT INTO products(productId, description) VALUES (5, 'exfoliator');
+INSERT INTO products (productId, name, brand, price, category, type, imageURL) VALUES
+                                                                                   (1, 'ultra fluid', 'Laneige', 40.50, 'sunscreen',
+                                                                                    'Broad-Spectrum SPF 50+: Protects against UVA and UVB rays. Centella asiatica: Soothes skin. Glycerin and Hydro-Ionized Mineral Water: Hydrate skin.',
+                                                                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s'),
+
+                                                                                   (2, 'ultra fluid', 'Shiseido', 42.00, 'sunscreen',
+                                                                                    'WetForce and HeatForce Technologies: Create an invisible, lightweight protective veil. SynchroShield™: Supports the protective layer upon exposure to heat, water, and sun.',
+                                                                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s'),
+
+                                                                                   (3, 'ultra fluid', 'Clinique', 59.50, 'sunscreen',
+                                                                                    'Water, Ethylhexyl Methoxycinnamate, C12-15 Alkyl Benzoate, Titanium Dioxide, Zinc Oxide, Caprylyl Methicone, Butylene Glycol, Aloe Barbadensis Leaf Water, Caffeine, Tocopheryl Acetate.',
+                                                                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s'),
+
+                                                                                   (4, 'ultra fluid', 'Evereden', 39.00, 'sunscreen',
+                                                                                    'Sheertech Zinc™: Lightweight, sheer texture with no white cast. Safflower Oleotech™: Hydrates skin throughout the day. Sunflower Seed Oil: Antioxidant-rich oil that conditions skin.',
+                                                                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s'),
+
+                                                                                   (5, 'ultra fluid', 'Dr.Jart+', 60.00, 'sunscreen',
+                                                                                    'Water, Homosalate, Ethylhexyl Methoxycinnamate, Propanediol, Ethylhexyl Salicylate, Alcohol, Octocrylene, Lavender Oil, Silica, Tocopherol.',
+                                                                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s'),
+
+                                                                                   (6, 'ultra fluid', 'Supergoop!', 33.00, 'sunscreen',
+                                                                                    'Sunflower Extract: Protects skin from environmental elements. Rosemary Leaf Extract: Calms skin and is rich in antioxidants.',
+                                                                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s'),
+
+                                                                                   (7, 'ultra fluid', 'CAY SKIN', 51.50, 'sunscreen',
+                                                                                    'Sea Moss: Hydrates and protects skin. Cocoa Seed Butter: Replenishes moisture. Hydrating Nectar: Improves skin texture.',
+                                                                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s'),
+
+                                                                                   (8, 'ultra fluid', 'Clarins', 44.00, 'sunscreen',
+                                                                                    'Sunflower: Soothes sunburned skin. Safflower: Enhances and intensifies a tan. Aloe Vera: Hydrates and calms sun-stressed skin.',
+                                                                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s'),
+
+                                                                                   (9, 'ultra fluid', 'Paula’s Choice', 54.00, 'sunscreen',
+                                                                                    'Broad-Spectrum SPF 50: Defends against UV rays. Oat and Green Tea Extracts: Relieve visible redness. Black Elderberry, Goji, and Pomegranate Extracts: Protect skin’s moisture barrier.',
+                                                                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s'),
+
+                                                                                   (10, 'ultra fluid', 'ILIA', 65.00, 'sunscreen',
+                                                                                    'Plant-based Squalane: Hydrates and improves elasticity. Niacinamide: Smooths texture and minimizes pores. Hyaluronic Acids: Plump and boost moisture levels.',
+                                                                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s');
+
 
 ----------------Ingredients-----------------
 INSERT INTO ingredients (ingredientId, ingredientName) VALUES (1, 'Water');
