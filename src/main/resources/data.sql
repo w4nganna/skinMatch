@@ -1,30 +1,35 @@
---
---
---INSERT INTO departments (code, name, contactEmail) VALUES ('MIE', 'Mechanical and Industrial Engineering', 'reception@mie.utoronto.ca');
---INSERT INTO departments (code, name, contactEmail) VALUES ('ECE', 'Electrical and Computer Engineering', 'eceinquiry@utoronto.ca');
---INSERT INTO departments (code, name, contactEmail) VALUES ('MSE', 'Materials Science and Engineering', 'materials.engineering@utoronto.ca');
---
---INSERT INTO students (id, firstName, lastName, email, initial) VALUES (1111, 'Tyrion', 'Lannister', 'tyrion.lannister@mail.univ.ca', 'R');
---INSERT INTO students (id, firstName, lastName, email) VALUES (2222, 'Cersei', 'Lannister', 'cersei.lannister@mail.univ.ca');
---INSERT INTO students (id, firstName, lastName, email, initial) VALUES (3333, 'Jaime', 'Lannister', 'jaime.lannister@mail.univ.ca', 'R');
---INSERT INTO students (id, firstName, lastName, email) VALUES (4444, 'Daenerys', 'Targaryen', 'jaime.targaryen@mail.univ.ca');
---INSERT INTO students (id, firstName, lastName, email) VALUES (5555, 'Jon', 'Snow', 'jon.snow@mail.univ.ca');
---
---INSERT INTO professors (id, firstName, lastName, email, office, salary) VALUES (1122, 'Sansa', 'Stark', 'sansa.stark@univ.ca', 'BA1234', 50000);
---INSERT INTO professors (id, firstName, lastName, email, office, salary) VALUES (3344, 'Arya', 'Stark', 'arya.stark@univ.ca', 'MC1234', 70000);
---INSERT INTO professors (id, firstName, lastName, email, office, salary) VALUES (5566, 'Jorah', 'Mormont', 'jorah.mormont@univ.ca', 'MY1234', 60000);
---
---INSERT INTO courses (code, name, professorId) VALUES ('GOT123', 'A Game of Thrones', 1122);
---INSERT INTO courses (code, name, professorId) VALUES ('GOT456', 'A Clash of Kings', 3344);
---INSERT INTO courses (code, name, professorId) VALUES ('GOT789', 'A Storm of Swords', 5566);
---
---INSERT INTO marks(studentId, courseCode, mark) VALUES(1111, 'GOT123', 80);
---INSERT INTO marks(studentId, courseCode, mark) VALUES(2222, 'GOT123', 85);
---INSERT INTO marks(studentId, courseCode, mark) VALUES(3333, 'GOT456', 90);
---INSERT INTO marks(studentId, courseCode, mark) VALUES(4444, 'GOT456', 95);
---INSERT INTO marks(studentId, courseCode, mark) VALUES(5555, 'GOT789', 100);
---INSERT INTO marks(studentId, courseCode, mark) VALUES(5555, 'GOT123', 80);
---INSERT INTO marks(studentId, courseCode, mark) VALUES(5555, 'GOT456', 90);
---
---INSERT INTO classrooms(code, capacity) VALUES('BA1190', 150);
---INSERT INTO classrooms(code, capacity) VALUES('GB144', 50);
+----------------User-----------------
+INSERT INTO users(userId, email, password) VALUES('00001', 'jialuo.chen@mail.utoronto.ca', '1111');
+INSERT INTO users(userId, email, password) VALUES('00002', 'lea.kwon@mail.utoronto.ca', '1234');
+
+----------------Skintypes-----------------
+INSERT INTO skintypes(skintypeId, description) VALUES (1, 'oily');
+INSERT INTO skintypes(skintypeId, description) VALUES (2, 'dry');
+INSERT INTO skintypes(skintypeId, description) VALUES (3, 'combination');
+
+----------------Concerns-----------------
+INSERT INTO concerns(concernId, description) VALUES (1, 'wrinkles');
+INSERT INTO concerns(concernId, description) VALUES (2, 'acne');
+INSERT INTO concerns(concernId, description) VALUES (3, 'pores');
+INSERT INTO concerns(concernId, description) VALUES (4, 'hyperpigmentation');
+INSERT INTO concerns(concernId, description) VALUES (5, 'irritation');
+INSERT INTO concerns(concernId, description) VALUES (6, 'dull skin');
+
+----------------Products-----------------
+INSERT INTO products (productId, name, brand, price, category, type, imageURL)
+VALUES
+    (1, 'ultra fluid', 'la roche posay', 30.50, 'sunscreen', 'dry', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s'),
+    (2, 'Hydrating Facial Cleanser', 'CeraVe', 14.99, 'Cleanser', 'dry', 'https://cloudinary.images-iherb.com/image/upload/f_auto,q_auto:eco/images/cet/cet92735/y/14.jpg'),
+    (3, 'Effaclar Purifying Foaming Gel', 'La Roche-Posay', 17.50, 'Cleanser', 'oily', 'https://cloudinary.images-iherb.com/image/upload/f_auto,q_auto:eco/images/cet/cet92735/y/14.jpg'),
+    (4, 'Glycolic Acid 7% Toning Solution', 'The Ordinary', 10.80, 'Toner', 'combo', 'https://www.sephora.com/productimages/sku/s2768083-main-zoom.jpg?imwidth=315'),
+    (5, 'Ultra Facial Moisturizer', 'Kiehl', 22.00, 'Moisturizer', 'dry', 'https://cloudinary.images-iherb.com/image/upload/f_auto,q_auto:eco/images/cet/cet11300/y/37.jpg'),
+    (6, 'Hydro Boost Water Gel', 'Neutrogena', 19.99, 'Moisturizer', 'oily', 'https://cloudinary.images-iherb.com/image/upload/f_auto,q_auto:eco/images/cet/cet11300/y/37.jpg'),
+    (7, 'Salicylic Acid 2% Exfoliating Solution', 'Paula’s Choice', 25.00, 'Exfoliator', 'combo', 'https://cdn-tp3.mozu.com/30113-50629/cms/50629/files/9b6a0227-a973-4a31-9164-6881f4b5eae1'),
+    (8, 'Anthelios Melt-in Milk Sunscreen SPF 60', 'La Roche-Posay', 36.99, 'Sunscreen', 'dry', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s'),
+    (9, 'Unseen Sunscreen SPF 40', 'Supergoop!', 34.00, 'Sunscreen', 'oily', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s'),
+    (10, 'Daily Microfoliant Exfoliator', 'Dermalogica', 59.00, 'Exfoliator', 'combo', 'https://cdn-tp3.mozu.com/30113-50629/cms/50629/files/9b6a0227-a973-4a31-9164-6881f4b5eae1');
+
+----------------Ingredients-----------------
+INSERT INTO ingredients (ingredientId, ingredientName) VALUES (1, 'Water');
+INSERT INTO ingredients (ingredientId, ingredientName) VALUES (2, 'Aloe Barbadensis Leaf Juice');
+INSERT INTO ingredients (ingredientId, ingredientName) VALUES (3, 'Test Ingredient');
