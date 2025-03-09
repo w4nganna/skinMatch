@@ -57,6 +57,38 @@ INSERT INTO products (productId, name, brand, price, category, type, imageURL) V
                                                                                     'Plant-based Squalane: Hydrates and improves elasticity. Niacinamide: Smooths texture and minimizes pores. Hyaluronic Acids: Plump and boost moisture levels.',
                                                                                     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s');
 
+INSERT INTO products (productId, name, brand, price, category, type, imageURL) VALUES
+                                                                                   (11, 'Superfood Cleanser', 'Youth to the People', 53.00, 'cleanser',
+                                                                                    'Water/Aqua/Eau, Cocamidopropyl Hydroxysultaine, Sodium Cocoyl Glutamate, Sorbeth-230 Tetraoleate, Polysorbate 20, Sodium Chloride, Aloe Barbadensis Leaf Juice Powder, Kale Leaf Extract, Spinach Leaf Extract, Green Tea Leaf Extract, Vitamin C, Glycerin, Vitamin B5, Vitamin E.',
+                                                                                    'https://example.com/youth-to-the-people-cleanser.jpg'),
+                                                                                   (12, 'Squalane Cleanser', 'The Ordinary', 14.80, 'cleanser',
+                                                                                    'Decyl-Glucoside and Coco-Glucoside: Help remove dirt and other impurities.',
+                                                                                    'https://example.com/the-ordinary-cleanser.jpg'),
+                                                                                   (13, 'Avocado Cleanser', 'Glow Recipe', 38.00, 'cleanser',
+                                                                                    'Ceramides, Prebiotics, Postbiotics, Colloidal Oatmeal, Avocado Oil.',
+                                                                                    'https://example.com/glow-recipe-cleanser.jpg'),
+                                                                                   (14, 'Cream Skin Milk Cleanser', 'Laneige', 39.50, 'cleanser',
+                                                                                    'Blue Hyaluronic Acid, Allantoin, Amino Acid Complex.',
+                                                                                    'https://example.com/laneige-cleanser.jpg'),
+                                                                                   (15, 'Pure Skin Cleanser', 'First Aid Beauty', 32.50, 'cleanser',
+                                                                                    'Aloe, Allantoin, Glycerin.',
+                                                                                    'https://example.com/first-aid-beauty-cleanser.jpg'),
+                                                                                   (16, 'Foaming Oil Cleanser', 'Skinfix', 40.50, 'cleanser',
+                                                                                    'Triple Lipid Complex, Seaweed Hyaluronate Blend, Aloe Vera.',
+                                                                                    'https://example.com/skinfix-cleanser.jpg'),
+                                                                                   (17, 'Green Tea Foam Cleanser', 'Innisfree', 19.00, 'cleanser',
+                                                                                    'Green Tea Water, Amino Acid Complex.',
+                                                                                    'https://example.com/innisfree-cleanser.jpg'),
+                                                                                   (18, 'Soy Face Cleanser', 'Fresh', 53.00, 'cleanser',
+                                                                                    'Soy Proteins, Cucumber Extract, Aloe Vera.',
+                                                                                    'https://example.com/fresh-cleanser.jpg'),
+                                                                                   (19, 'Vinopure Cleanser', 'Caudalie', 57.00, 'cleanser',
+                                                                                    'Grape Water, Salicylic Acid, Peppermint Oil.',
+                                                                                    'https://example.com/caudalie-cleanser.jpg'),
+                                                                                   (20, 'Whipped Greens Cleanser', 'Farmacy', 44.00, 'cleanser',
+                                                                                    'Moringa, Apple and Oats, Vitamin F.',
+                                                                                    'https://example.com/farmacy-cleanser.jpg');
+
 
 ----------------Ingredients-----------------
 INSERT INTO ingredients (ingredientId, ingredientName) VALUES (1, 'Water');
