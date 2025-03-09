@@ -101,6 +101,32 @@ INSERT INTO products (productId, name, brand, price, category, type, imageURL) V
                                                                                    (29, 'Squalane + Omega Repair Cream', 'Biossance', 81.00, 'Moisturizer', 'Normal, Dry, Combination', 'image_url_here'),
                                                                                    (30, 'Moisturizing Cream', 'Cetaphil', 15.29, 'Moisturizer', 'Dry', 'image_url_here');
 
+INSERT INTO products (productId, name, brand, price, category, type, imageURL)
+VALUES
+    (31, 'Toner', 'Lise Watier', 32.00, 'Toner', 'Normal, Dry', 'N/A'),
+    (32, 'Toner', 'Clarins', 48.00, 'Toner', 'Normal, Dry', 'N/A'),
+    (33, 'Toner', 'Dermalogica', 72.00, 'Toner', 'Normal, Combination, Dry', 'N/A'),
+    (34, 'Toner', 'La Mer', 162.00, 'Toner', 'Normal, Combination, Oily', 'N/A'),
+    (35, 'Toner', 'Fenty Beauty by Rihanna', 25.00, 'Toner', 'Normal, Combination, Oily', 'N/A'),
+    (36, 'Toner', 'Farmacy', 23.00, 'Toner', 'Normal, Combination, Oily', 'N/A'),
+    (37, 'Toner', 'Mario Badescu', 24.50, 'Toner', 'Dry and Combination', 'N/A'),
+    (38, 'Toner', 'Belif', 40.50, 'Toner', 'Normal, Combination, Oily', 'N/A'),
+    (39, 'Toner', 'Laneige', 42.00, 'Toner', 'Normal, Dry', 'N/A'),
+    (40, 'Toner', 'Lancome', 84.00, 'Toner', 'Normal, Combination, Oily', 'N/A');
+
+INSERT INTO products (productId, name, brand, price, category, type, imageURL)
+VALUES
+    (41, 'Youth To The People', 'Youth To The People', 53.00, 'exfoliator', 'Normal, Dry, Combination, Oily', 'https://www.example.com/image1.jpg'),
+    (42, 'Tatcha', 'Tatcha', 92.00, 'exfoliator', 'Normal, Dry, Combination, Oily', 'https://www.example.com/image2.jpg'),
+    (43, 'Origins', 'Origins', 39.00, 'exfoliator', 'Normal, Combination, Oily', 'https://www.example.com/image3.jpg'),
+    (44, 'Caudalie', 'Caudalie', 51.00, 'exfoliator', 'Normal, Dry, Combination, Oily', 'https://www.example.com/image4.jpg'),
+    (45, 'The INKEY List', 'The INKEY List', 24.00, 'exfoliator', 'Normal, Dry, Combination, Oily', 'https://www.example.com/image5.jpg'),
+    (46, 'Clinique', 'Clinique', 40.50, 'exfoliator', 'Oily, Combination', 'https://www.example.com/image6.jpg'),
+    (47, 'Glow Recipe', 'Glow Recipe', 57.00, 'exfoliator', 'Normal, Dry, Combination, Oily', 'https://www.example.com/image7.jpg'),
+    (48, 'Glossier', 'Glossier', 41.00, 'exfoliator', 'Normal, Dry, Combination, Oily', 'https://www.example.com/image8.jpg'),
+    (49, 'Peace Out', 'Peace Out', 36.00, 'exfoliator', 'Normal, Combination, Oily', 'https://www.example.com/image9.jpg'),
+    (50, 'Fresh', 'Fresh', 53.00, 'exfoliator', 'Normal, Dry, Combination, Oily', 'https://www.example.com/image10.jpg');
+
 
 ----------------Ingredients-----------------
 INSERT INTO ingredients (ingredientId, ingredientName) VALUES (1, 'Water');
