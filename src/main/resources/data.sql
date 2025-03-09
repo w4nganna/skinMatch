@@ -21,5 +21,5 @@ INSERT INTO ingredients (ingredientId, ingredientName) VALUES (2, 'Aloe Barbaden
 
 
 ----------------Products-----------------
--- INSERT INTO products (productId, name, brand, price, category, type, imageURL)
--- VALUES (1, 'ultra fluid', 'la roche posay', 30.50, 'sunscreen', 'dry', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s');
+INSERT INTO products (productId, name, brand, price, category, type, imageURL)
+VALUES (1, 'ultra fluid', 'la roche posay', 30.50, 'sunscreen', 'dry', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s');
