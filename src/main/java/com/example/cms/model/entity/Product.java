@@ -75,16 +75,20 @@ public class Product {
     private List<Skintype> skintypes;
 
     public Product(long productId, String name, String brand, Double price,
-                   String category, String type) {
+                   String category, String type, String imageURL, List<TestResults> testResults,
+                   List<Ingredient> ingredients, List<Concern> concerns, List<Skintype> skintypes) {
         this.productId = productId;
         this.name = name;
         this.brand = brand;
         this.price = price;
         this.category = category;
         this.type = type;
+        this.imageURL = imageURL;
+        this.testResults = testResults;
+        this.ingredients = ingredients;
+        this.concerns = concerns;
+        this.skintypes = skintypes;
 
     }
-
-
 
 }
