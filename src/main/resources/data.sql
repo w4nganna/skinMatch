@@ -18,7 +18,7 @@ INSERT INTO concerns(concernId, description) VALUES (6, 'dull skin');
 ----------------Products-----------------
 INSERT INTO products (productId, name, brand, price, category, type, imageURL)
 VALUES
-    (1, 'ultra fluid', 'la roche posay', 30.50, 'sunscreen', 'dry', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s'),
+    (1, 'ultra fluid', 'la roche posay', 30.50, 'Sunscreen', 'dry', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s'),
     (2, 'Hydrating Facial Cleanser', 'CeraVe', 14.99, 'Cleanser', 'dry', 'https://cloudinary.images-iherb.com/image/upload/f_auto,q_auto:eco/images/cet/cet92735/y/14.jpg'),
     (3, 'Effaclar Purifying Foaming Gel', 'La Roche-Posay', 17.50, 'Cleanser', 'oily', 'https://cloudinary.images-iherb.com/image/upload/f_auto,q_auto:eco/images/cet/cet92735/y/14.jpg'),
     (4, 'Glycolic Acid 7% Toning Solution', 'The Ordinary', 10.80, 'Toner', 'combo', 'https://www.sephora.com/productimages/sku/s2768083-main-zoom.jpg?imwidth=315'),
