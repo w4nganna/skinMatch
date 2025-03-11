@@ -33,3 +33,6 @@ VALUES
 INSERT INTO ingredients (ingredientId, ingredientName) VALUES (1, 'Water');
 INSERT INTO ingredients (ingredientId, ingredientName) VALUES (2, 'Aloe Barbadensis Leaf Juice');
 INSERT INTO ingredients (ingredientId, ingredientName) VALUES (3, 'Test Ingredient');
+
+----------------Reviews-----------------
+INSERT INTO reviews (userId, productId, reviewBody, score, date) VALUES ('00001', 1, 'This product was perfect for my skin', 5, current_date);
