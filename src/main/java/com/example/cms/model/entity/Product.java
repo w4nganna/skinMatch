@@ -62,8 +62,8 @@ public class Product {
     //Many-to-Many relationship with Concerns
     @ManyToMany
     @JoinTable(
-            name = "userSkincareConcerns",
-            joinColumns = @JoinColumn(name = "testResultId"),
+            name = "ProductConcerns",
+            joinColumns = @JoinColumn(name = "productId"),
             inverseJoinColumns = @JoinColumn(name = "concernId")
     )
     private List<Concern> concerns;
