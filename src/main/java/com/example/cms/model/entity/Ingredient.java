@@ -17,7 +17,8 @@ import java.util.List;
 @Table(name = "ingredients")
 public class Ingredient{
     @Id
-    @NotEmpty
+//    @NotEmpty
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ingredientId;
 
     @NotEmpty

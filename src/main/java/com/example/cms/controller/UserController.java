@@ -1,9 +1,13 @@
 package com.example.cms.controller;
 
+import com.example.cms.controller.Dto.ProductDto;
 import com.example.cms.controller.Dto.UserDto;
+import com.example.cms.controller.exceptions.ProductNotFoundException;
 import com.example.cms.controller.exceptions.UserNotFoundException;
+import com.example.cms.model.entity.Product;
 import com.example.cms.model.entity.TestResults;
 import com.example.cms.model.entity.User;
+import com.example.cms.model.repository.ProductRepository;
 import com.example.cms.model.repository.TestResultsRepository;
 import com.example.cms.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -21,11 +27,13 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final TestResultsRepository testResultsRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
-    public UserController(TestResultsRepository testResultsRepository, UserRepository userRepository) {
+    public UserController(TestResultsRepository testResultsRepository, UserRepository userRepository, ProductRepository productRepository) {
         this.testResultsRepository = testResultsRepository;
         this.userRepository = userRepository;
+        this.productRepository = productRepository;
     }
     //-------------------Get------------------
     @GetMapping("/users")
@@ -50,6 +58,21 @@ public class UserController {
     @GetMapping("/signup/email/{email}")
     public ResponseEntity<Boolean> isEmailUnique(@PathVariable String email) {
         return ResponseEntity.ok(!userRepository.emailExists(email));
+    }
+
+    //Get favourite products
+    @GetMapping("/users/{userId}/favs")
+    public Set<ProductDto> getFavProds(@PathVariable String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+        Set<ProductDto> favProds = user.getFavourites().stream()
+                .map(product -> new ProductDto(
+                        product.getProductId(),
+                        product.getName(),
+                        product.getBrand(),
+                        product.getPrice(),
+                        product.getImageURL())).collect(Collectors.toSet());
+        return favProds;
     }
 
     //-------------------Put------------------
@@ -136,6 +159,47 @@ public class UserController {
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    //Add or Remove favourite product
+    @PutMapping("/users/{userId}/favs/{productId}")
+    public ResponseEntity<String> updateFavProds(@PathVariable("userId") String userId, @PathVariable("productId") Long productId) {
+        //Find user
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+        //Find product
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+        //Remove if already favourited
+        if (user.getFavourites().contains(product)) {
+            //update user
+            user.getFavourites().remove(product);
+            userRepository.save(user);
+            //update product
+            product.getUsers().remove(user);
+            productRepository.save(product);
+            return ResponseEntity.ok("Product removed from favourites.");
+        //Add if not favourited
+        } else {
+            //update user
+            user.getFavourites().add(product);
+            userRepository.save(user);
+            //update product
+            product.getUsers().add(user);
+            productRepository.save(product);
+            return ResponseEntity.ok("Product added to favourites.");
+        }
+    }
+
+    //Clear favourite list
+    @PutMapping("users/{userId}/favs/clear")
+    public ResponseEntity<String> clearFavProds(@PathVariable("userId") String userId) {
+        //Find user
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+        user.getFavourites().clear();
+        userRepository.save(user);
+        return ResponseEntity.ok("Favourites cleared.");
+    }
+
     //-------------------Post------------------
     @PostMapping("/users")
     public User createUser(@RequestBody UserDto userDto) {
@@ -158,6 +222,4 @@ public class UserController {
         userRepository.deleteById(userId);
         return ResponseEntity.ok("User with ID " + userId + " deleted successfully.");
     }
-
-
 }
