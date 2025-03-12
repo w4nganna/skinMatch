@@ -9,4 +9,5 @@ public class ReviewDto {
     private Long productId;
     private String reviewBody;
     private Integer score;
+    private String date;
 }
