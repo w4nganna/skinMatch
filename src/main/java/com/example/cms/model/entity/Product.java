@@ -72,7 +72,7 @@ public class Product {
     @ManyToMany
     @JoinTable(
             name = "userSkintype",
-            joinColumns = @JoinColumn(name = "testResultId"),
+            joinColumns = @JoinColumn(name = "productId"),
             inverseJoinColumns = @JoinColumn(name = "skintypeId")
     )
     private List<Skintype> skintypes;
