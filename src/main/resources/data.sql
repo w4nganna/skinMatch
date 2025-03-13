@@ -56,8 +56,14 @@ VALUES
 
 ----------------Ingredients-----------------
 INSERT INTO ingredients (ingredientId, ingredientName) VALUES (1, 'Water');
-INSERT INTO ingredients (ingredientId, ingredientName) VALUES (2, 'Aloe Barbadensis Leaf Juice');
-INSERT INTO ingredients (ingredientId, ingredientName) VALUES (3, 'Test Ingredient');
+INSERT INTO ingredients (ingredientId, ingredientName) VALUES (2, 'Aloe Vera Juice');
+INSERT INTO ingredients (ingredientId, ingredientName) VALUES (3, 'Retinol');
+INSERT INTO ingredients (ingredientId, ingredientName) VALUES (4, 'Vitamin C');
+INSERT INTO ingredients (ingredientId, ingredientName) VALUES (5, 'Hyaluronic Acid');
+INSERT INTO ingredients (ingredientId, ingredientName) VALUES (6, 'SPF50+');
+INSERT INTO ingredients (ingredientId, ingredientName) VALUES (7, 'Glycerin');
+INSERT INTO ingredients (ingredientId, ingredientName) VALUES (8, 'Oil Extracts');
+INSERT INTO ingredients (ingredientId, ingredientName) VALUES (9, 'Parfum');
 
 ----------------Reviews-----------------
 INSERT INTO reviews (userId, productId, reviewBody, score, date)
