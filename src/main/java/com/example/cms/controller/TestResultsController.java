@@ -1,11 +1,13 @@
 package com.example.cms.controller;
 
+import com.example.cms.controller.Dto.ProductDto;
 import com.example.cms.controller.exceptions.UserNotFoundException;
 import com.example.cms.model.entity.TestResults;
 import com.example.cms.model.entity.Skintype;
 import com.example.cms.model.repository.*;
 import com.example.cms.controller.Dto.TestResultsDto;
 import com.example.cms.model.entity.User;
+import com.example.cms.model.service.SkinCareRountineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,13 +27,19 @@ public class TestResultsController {
     private final UserRepository userRepository;
     private final SkintypeRepository skintypeRepository;
     private final IngredientRepository ingredientRepository;
+    private final SkinCareRountineService skinCareRountineService;
 
     @Autowired
-    public TestResultsController(TestResultsRepository testResultsRepository, UserRepository userRepository, SkintypeRepository skintypeRepository, IngredientRepository ingredientRepository) {
+    public TestResultsController(TestResultsRepository testResultsRepository,
+                                 UserRepository userRepository,
+                                 SkintypeRepository skintypeRepository,
+                                 IngredientRepository ingredientRepository,
+                                 SkinCareRountineService skinCareRountineService) {
         this.testResultsRepository = testResultsRepository;
         this.userRepository = userRepository;
         this.skintypeRepository = skintypeRepository;
         this.ingredientRepository = ingredientRepository;
+        this.skinCareRountineService = skinCareRountineService;
     }
 
     //-------------------Get Mapping---------------
@@ -48,7 +56,7 @@ public class TestResultsController {
         return user.getTestResults();
     }
 
-    @GetMapping("/")
+    @GetMapping("/testResults")
     public List<TestResults> getTestResults() {
         List<TestResults> testResults = testResultsRepository.findAll();
         if (testResults.isEmpty()) {
@@ -68,7 +76,7 @@ public class TestResultsController {
             "budget" : 20,
             "user" : "00001"
         }
-	*/
+	    */
         //Fetch user from the database
         User user = userRepository.findById(testResultsDTO.getUser())
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + testResultsDTO.getUser()));
@@ -76,7 +84,7 @@ public class TestResultsController {
         // Check if the user already has a TestResults object
         if (user.getTestResults() != null) {
             // Delete the old test result before saving the new one
-            testResultsRepository.delete(user.getTestResults());
+            this.testResultsRepository.delete(user.getTestResults());
         }
 
         //-----Set the attributes & relationships-----
@@ -112,7 +120,8 @@ public class TestResultsController {
         return savedResult;
     }
 
-    private void matchingAlgorithm(TestResults testResult) {
+    // match products
+    private List<ProductDto> matchingAlgorithm(TestResults testResult) {
         //Logic to assign recommended products
         List<Product> recommendedProducts = new ArrayList<>();
 
@@ -120,6 +129,8 @@ public class TestResultsController {
 
         //Set products list
         testResult.setRecommendedProducts(recommendedProducts);
+
+        return this.skinCareRountineService.matchProducts();
     }
 
     //-------------------Delete Mapping---------------
