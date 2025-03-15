@@ -23,7 +23,7 @@ public class Concern {
 
     @Id
     @NotNull
-    private int concernId;
+    private Integer concernId;
 
     @NotEmpty
     private String description;

@@ -18,7 +18,7 @@ public class ProductSearchService {
     //------------Product search method I: Java filter-----------
     //Return list of filtered product DTOs
     public List<ProductDto> getFilteredProductsI(
-            Double maxPrice, String sortBy,
+            Double maxPrice, String sortBy, Integer category,
             List<String> brands, List<String> types, List<Long> avoidIngredients, List<Integer> concerns) {
 
         //Fetch all products from the database
@@ -27,6 +27,9 @@ public class ProductSearchService {
         return products.stream()
                  //Filter products that are <= maximum price
                 .filter(product -> (maxPrice == null || product.getPrice() <= maxPrice))
+
+                //Filter products that have matching category
+                .filter(product -> (category == null || product.getCategory().getCategoryId() == category))
 
                 //Filter products that belong to any of the brands on the list
                 .filter(product -> (brands == null || brands.isEmpty() || brands.contains(product.getBrand())))
@@ -57,12 +60,12 @@ public class ProductSearchService {
 
     //------------Product search method II: SQL filter-----------
     public List<ProductDto> getFilteredProductsII(
-            Double maxPrice, String sortBy,
+            Double maxPrice, String sortBy, Integer category,
             List<String> brands, List<String> types, List<Long> avoidIngredients, List<Integer> concerns) {
 
         //Call repository method to filter via SQL
         List<Product> products = productRepository.findFilteredProducts(
-                maxPrice, brands, types, concerns, avoidIngredients, sortBy
+                maxPrice, brands, category, types, concerns, avoidIngredients, sortBy
         );
 
         //Convert each Product entity to a ProductDto
