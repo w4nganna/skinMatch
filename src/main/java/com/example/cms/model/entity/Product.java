@@ -1,5 +1,6 @@
 package com.example.cms.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,8 @@ import javax.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 @Entity
 @NoArgsConstructor
@@ -59,8 +62,8 @@ public class Product {
     //Many-to-Many relationship with Concerns
     @ManyToMany
     @JoinTable(
-            name = "userSkincareConcerns",
-            joinColumns = @JoinColumn(name = "testResultId"),
+            name = "ProductConcerns",
+            joinColumns = @JoinColumn(name = "productId"),
             inverseJoinColumns = @JoinColumn(name = "concernId")
     )
     private List<Concern> concerns;
@@ -69,10 +72,24 @@ public class Product {
     @ManyToMany
     @JoinTable(
             name = "userSkintype",
-            joinColumns = @JoinColumn(name = "testResultId"),
+            joinColumns = @JoinColumn(name = "productId"),
             inverseJoinColumns = @JoinColumn(name = "skintypeId")
     )
     private List<Skintype> skintypes;
+
+    //Many-to-Many relationship with products
+    @JsonBackReference
+    @ManyToMany(mappedBy = "favourites")
+    private Set<User> users = new HashSet<>();
+
+    //Many-to-Many relationship of alternative products
+    @ManyToMany
+    @JoinTable(
+            name = "product_alternatives",
+            joinColumns = @JoinColumn(name = "productId"),
+            inverseJoinColumns = @JoinColumn(name = "altProdId")
+    )
+    private Set<Product> alternatives;
 
     public Product(long productId, String name, String brand, Double price,
                    String category, String type, String imageURL, List<TestResults> testResults,

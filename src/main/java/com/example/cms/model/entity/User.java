@@ -1,5 +1,6 @@
 package com.example.cms.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +10,10 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -36,6 +41,16 @@ public class User {
     @JoinColumn(name = "testResultsId")
     @JsonIgnore //Prevent recursion issues - Don't return test results when getting user
     private TestResults testResults;
+
+    //Many-to-Many relationship with products
+    @JsonManagedReference
+    @ManyToMany()
+    @JoinTable(
+            name = "user_favourites",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "productId")
+    )
+    private Set<Product> favourites = new HashSet<>();
 
     public User(String userId, String email, String password) {
         this.userId = userId;

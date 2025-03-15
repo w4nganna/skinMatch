@@ -36,8 +36,7 @@ public class Review {
     private Product product;
 
     @NotNull
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+    private String date;
 
     @NotNull
     private int score; //Number of stars from 1-5

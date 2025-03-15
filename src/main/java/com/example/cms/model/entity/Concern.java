@@ -1,5 +1,6 @@
 package com.example.cms.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,17 +24,19 @@ public class Concern {
 
     @Id
     @NotNull
-    private int concernId;
+    private Integer concernId;
 
     @NotEmpty
     private String description;
 
     // Many-to-Many relationship with TestResults
     @ManyToMany(mappedBy = "concerns")
+    @JsonIgnore
     private List<TestResults> testResults  = new ArrayList<>();
 
     // Many-to-Many relationship with Product
-    @ManyToMany(mappedBy = "skintypes")
+    @ManyToMany(mappedBy = "concerns")
+    @JsonIgnore
     private List<Product> products  = new ArrayList<>();
 
     public Concern(int id, String description)

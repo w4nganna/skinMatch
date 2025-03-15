@@ -65,6 +65,27 @@ public class TestResultsController {
         return testResults;
     }
 
+    //Recommended Products by userId
+    @GetMapping("/users/{userId}/recommendations")
+    public List<ProductDto> getRecommendedProducts(@PathVariable String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+
+        //Get list of recommendations and stream to DTO
+        List<ProductDto> recommendations = user.getTestResults().getRecommendedProducts().stream()
+                 .map(product -> new ProductDto(
+                         product.getProductId(),
+                         product.getName(),
+                         product.getBrand(),
+                         product.getPrice(),
+                         product.getImageURL()
+                 ))
+                 .collect(Collectors.toList());
+
+        //Return recommended products
+        return recommendations;
+    }
+
     //-------------------Post Mapping---------------
     @PostMapping("/")
     @Transactional

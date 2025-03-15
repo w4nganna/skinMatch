@@ -29,11 +29,10 @@ public class ReviewController {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
     }
-
-
-    @GetMapping("/reviews/{productId}")
-    public List<Review> getReviewsbyProduct(@PathVariable Long productId) {
-        List<Review> reviews = reviewRepository.findByProductId(productId);
+    //Read all reviews for a product
+    @GetMapping("/reviews/{productId}/{userId}")
+    public List<Review> getReviewsByProduct(@PathVariable Long productId, @PathVariable String userId) {
+        List<Review> reviews = reviewRepository.findByProductId(productId, userId);
 
         if (reviews.isEmpty()) {
             throw new RuntimeException("No reviews found for productId: " + productId);
@@ -42,12 +41,17 @@ public class ReviewController {
         return reviews;
 
     }
+    //Read average score of a product
+    @GetMapping("/reviews/{productId}/average")
+    public Double getAverageScore(@PathVariable Long productId) {
+        return reviewRepository.findAverageScoreByProductId(productId);
+    }
+
     //Create review
     // INSERT INTO reviews(userId, productId, reviewBody, score, date) VALUES (00001, 1, 'This product was perfect for my skin')
     @PostMapping("/reviews")
     Review createReview(@RequestBody ReviewDto reviewDto){
        Review review = new Review();
-       Date date = new Date();
        review.setReviewId(new ReviewKey(reviewDto.getUserId(), reviewDto.getProductId()));
        User user = userRepository.findById(reviewDto.getUserId()).orElseThrow(
                () -> new UserNotFoundException(reviewDto.getUserId())
@@ -60,14 +64,13 @@ public class ReviewController {
        review.setProduct(product);
        review.setReviewBody(reviewDto.getReviewBody());
        review.setScore(reviewDto.getScore());
-       review.setDate(date);
+       review.setDate(reviewDto.getDate());
        return reviewRepository.save(review);
     }
 
     //update review
-    @PutMapping("/reviews/{userId}/{productId}")
-    Review updateReview(@RequestBody ReviewDto reviewDto, @PathVariable String userId, @PathVariable Long productId){
-        Date date = new Date();
+    @PutMapping("/reviews/{productId}/{userId}")
+    Review updateReview(@RequestBody ReviewDto reviewDto, @PathVariable Long productId, @PathVariable String userId){
         return reviewRepository.findById(new ReviewKey(userId, productId))
                 .map(review -> {
                     review.setReviewId(new ReviewKey(reviewDto.getUserId(), reviewDto.getProductId()));
@@ -80,7 +83,7 @@ public class ReviewController {
                     ));
                     review.setReviewBody(reviewDto.getReviewBody());
                     review.setScore(reviewDto.getScore());
-                    review.setDate(date);
+                    review.setDate(reviewDto.getDate());
                     return reviewRepository.save(review);
                 })
                 .orElseGet(() -> {
@@ -96,13 +99,13 @@ public class ReviewController {
                     review.setProduct(product);
                     review.setReviewBody(reviewDto.getReviewBody());
                     review.setScore(reviewDto.getScore());
-                    review.setDate(date);
+                    review.setDate(reviewDto.getDate());
                     return reviewRepository.save(review);
                 });
     }
 
-    @DeleteMapping("/reviews/{userId}/{productId}")
-    void deleteReview(@PathVariable("userId") String userId, @PathVariable ("productId") Long productId){
+    @DeleteMapping("/reviews/{productId}/{userId}")
+    void deleteReview(@PathVariable ("productId") Long productId, @PathVariable("userId") String userId){
         reviewRepository.deleteById(new ReviewKey(userId, productId));
     }
 }
