@@ -29,7 +29,7 @@ public class ProductSearchService {
                 .filter(product -> (maxPrice == null || product.getPrice() <= maxPrice))
 
                 //Filter products that have matching category
-                .filter(product -> (category == null || product.getCategory().getCategoryId() == category))
+                //.filter(product -> (category == null || product.getCategory().getCategoryId() == category))
 
                 //Filter products that belong to any of the brands on the list
                 .filter(product -> (brands == null || brands.isEmpty() || brands.contains(product.getBrand())))
