@@ -34,8 +34,6 @@ VALUES
     (12, 'Omega Repair Deep Hydration Moisturizer with Ceramides and Hyaluronic Acid + Squalane', 'Biossance ', 81.00, 'Moisturizer', 'combo', 'https://www.sephora.com/productimages/sku/s2105856-main-zoom.jpg?imwidth=3000'),
 
 
-
-
     (13, 'Hydrating Facial Cleanser', 'CeraVe', 14.99, 'Cleanser', 'dry', 'https://cloudinary.images-iherb.com/image/upload/f_auto,q_auto:eco/images/cet/cet92735/y/14.jpg'),
     (14, 'Gentle Cleansing Foam', 'Sulwhasoo', 17.00, 'Cleanser', 'dry', 'https://www.sephora.com/productimages/sku/s2708469-main-zoom.jpg?imwidth=3000'),
     (15, 'Effaclar Purifying Foaming Gel', 'La Roche-Posay', 17.50, 'Cleanser', 'oily', 'https://cloudinary.images-iherb.com/image/upload/f_auto,q_auto:eco/images/cet/cet92735/y/14.jpg'),
@@ -64,6 +62,65 @@ INSERT INTO ingredients (ingredientId, ingredientName) VALUES (6, 'SPF50+');
 INSERT INTO ingredients (ingredientId, ingredientName) VALUES (7, 'Glycerin');
 INSERT INTO ingredients (ingredientId, ingredientName) VALUES (8, 'Oil Extracts');
 INSERT INTO ingredients (ingredientId, ingredientName) VALUES (9, 'Parfum');
+
+----------------Product Alternatives-----------------
+INSERT INTO product_alternatives (productID, altProdId) VALUES (1,2), (2,1);
+INSERT INTO product_alternatives (productID, altProdId) VALUES (3,4), (4,3);
+INSERT INTO product_alternatives (productID, altProdId) VALUES (5,6), (6,5);
+INSERT INTO product_alternatives (productId, altProdId) VALUES (7,8), (8,7);
+INSERT INTO product_alternatives (productId, altProdId) VALUES (9,10), (10,9);
+INSERT INTO product_alternatives (productId, altProdId) VALUES (11,12), (12,11);
+INSERT INTO product_alternatives (productId, altProdId) VALUES (13,14), (14,13);
+INSERT INTO product_alternatives (productId, altProdId) VALUES (15,16), (16,15);
+INSERT INTO product_alternatives (productId, altProdId) VALUES (17,18), (18,17);
+INSERT INTO product_alternatives (productId, altProdId) VALUES (19,20), (20,19);
+INSERT INTO product_alternatives (productId, altProdId) VALUES (21,22), (22,21);
+INSERT INTO product_alternatives (productId, altProdId) VALUES (23,24), (24,23);
+INSERT INTO product_alternatives (productId, altProdId)VALUES (25,26), (26,25);
+
+----------------Product Concerns-----------------
+INSERT INTO ProductConcerns (productId, concernId) VALUES (7,1),(11,1), (12,1), (19,1), (20,1);
+INSERT INTO ProductConcerns (productId, concernId) VALUES (15,2),(16,2), (17,2), (22,2), (25,2);
+INSERT INTO ProductConcerns (productId, concernId) VALUES (15,3),(17,3), (22,3), (26,3);
+INSERT INTO ProductConcerns (productId, concernId) VALUES (4, 4), (5, 4), (6, 4), (22, 4), (25, 4);
+INSERT INTO ProductConcerns (productId, concernId) VALUES(11, 5), (12, 5), (19, 5), (23, 5), (6, 5);
+INSERT INTO ProductConcerns (productId, concernId) VALUES (22, 6), (24, 6), (26, 6), (4, 6);
+
+----------------Product Ingredients-----------------
+
+ INSERT INTO ProductIngredients (productId, ingredientId) VALUES (1, 6), (1, 7), (1, 5), -- Ultra Fluid
+                                                                  (2, 6), (2, 7), (2, 5), -- Anthelios Melt-in Milk Sunscreen SPF 60
+                                                                  (3, 6), (3, 8), (3, 5), -- Unseen Sunscreen SPF 40
+                                                                  (4, 6), (4, 4), (4, 5), -- Urban Environment Vita-Clear Sunscreen SPF 42
+                                                                  (5, 6), (5, 2), (5, 5), -- Hydro UV Defense Sunscreen - SPF50+
+                                                                  (6, 6), (6, 3), (6, 7); -- Mini Cicapair Color Correcting Treatment SPF 30
+
+INSERT INTO ProductIngredients (productId, ingredientId) VALUES (7, 1), (7, 5), (7, 7), -- Ultra Facial Moisturizer
+                                                                 (8, 1), (8, 5), (8, 2), -- Natural Moisturizing Factors + Beta Glucan
+                                                                 (9, 1), (9, 5), (9, 7), -- Hydro Boost Water Gel
+                                                                 (10, 6), (10, 5), (10, 7), -- AM Facial Moisturizing Lotion SPF 30
+                                                                 (11, 1), (11, 3), (11, 5), -- Barrier+ Strengthening and Moisturizing Triple Lipid-Peptide Refillable Cream
+                                                                 (12, 1), (12, 4), (12, 5); -- Omega Repair Deep Hydration Moisturizer
+
+INSERT INTO ProductIngredients (productId, ingredientId) VALUES (13, 1), (13, 5), (13, 7), -- Hydrating Facial Cleanser
+                                                                 (14, 1), (14, 2), (14, 7), -- Gentle Cleansing Foam
+                                                                 (15, 1), (15, 4), (15, 7), -- Effaclar Purifying Foaming Gel
+                                                                 (16, 1), (16, 8), (16, 7), -- Glucoside Foaming Cleanser
+                                                                 (17, 1), (17, 2), (17, 7), -- Sulfate-Free Green Tea Amino Acid Cleansing Foam
+                                                                 (18, 1), (18, 8), (18, 7); -- Anua - Heartleaf Succinic Moisture Cleansing Foam
+
+-- Toners
+INSERT INTO ProductIngredients (productId, ingredientId) VALUES (19, 1), (19, 2), (19, 5), -- Pyunkang Yul Calming Deep Moisture Toner
+                                                                 (20, 1), (20, 8), (20, 5), -- Glazing Milk
+                                                                 (21, 1), (21, 5), (21, 7), -- Mini Cream Skin Refillable Toner & Moisturizer
+                                                                 (22, 1), (22, 4), (22, 7), -- Glycolic Acid 7% Toning Solution
+                                                                 (23, 1), (23, 2), (23, 5), -- Anua - Heartleaf 77% Soothing Toner Mini
+                                                                 (24, 1), (24, 8), (24, 5); -- Cetaphil Healthy Radiance Hydrating Toner
+
+INSERT INTO ProductIngredients (productId, ingredientId) VALUES (25, 1), (25, 3), (25, 5), -- Salicylic Acid 2% Exfoliating Solution
+                                                                 (26, 1), (26, 4), (26, 5); -- Daily Microfoliant Exfoliator
+
+
 
 ----------------Reviews-----------------
 INSERT INTO reviews (userId, productId, reviewBody, score, date)
