@@ -3,17 +3,17 @@ INSERT INTO users(userId, email, password) VALUES('00001', 'jialuo.chen@mail.uto
 INSERT INTO users(userId, email, password) VALUES('00002', 'lea.kwon@mail.utoronto.ca', '1234');
 
 ----------------Skintypes-----------------
-INSERT INTO skintypes(skintypeId, description) VALUES (1, 'oily');
-INSERT INTO skintypes(skintypeId, description) VALUES (2, 'dry');
-INSERT INTO skintypes(skintypeId, description) VALUES (3, 'combination');
+INSERT INTO skintypes(skintypeId, description) VALUES (1, 'Oily');
+INSERT INTO skintypes(skintypeId, description) VALUES (2, 'Dry');
+INSERT INTO skintypes(skintypeId, description) VALUES (3, 'Combination');
 
 ----------------Concerns-----------------
-INSERT INTO concerns(concernId, description) VALUES (1, 'wrinkles');
-INSERT INTO concerns(concernId, description) VALUES (2, 'acne');
-INSERT INTO concerns(concernId, description) VALUES (3, 'pores');
-INSERT INTO concerns(concernId, description) VALUES (4, 'hyperpigmentation');
-INSERT INTO concerns(concernId, description) VALUES (5, 'irritation');
-INSERT INTO concerns(concernId, description) VALUES (6, 'dull skin');
+INSERT INTO concerns(concernId, description) VALUES (1, 'Wrinkles');
+INSERT INTO concerns(concernId, description) VALUES (2, 'Acne');
+INSERT INTO concerns(concernId, description) VALUES (3, 'Pores');
+INSERT INTO concerns(concernId, description) VALUES (4, 'Hyperpigmentation');
+INSERT INTO concerns(concernId, description) VALUES (5, 'Irritation');
+INSERT INTO concerns(concernId, description) VALUES (6, 'Dull skin');
 
 ----------------Products-----------------
 INSERT INTO products (productId, name, brand, price, category, type, imageURL)

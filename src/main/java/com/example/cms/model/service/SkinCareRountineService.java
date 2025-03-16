@@ -29,7 +29,7 @@ public class SkinCareRountineService {
     * */
 
     // fetch all products
-    List<Product> products = productRepository.findAll();
+    //List<Product> products = productRepository.findAll();
 
 //    public List<ProductDto> matchProducts() {
 //        // temp init Dto (to make system not report red err
