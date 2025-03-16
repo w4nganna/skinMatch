@@ -2,16 +2,14 @@ package com.example.cms.controller;
 
 import com.example.cms.controller.Dto.ProductDto;
 import com.example.cms.controller.exceptions.UserNotFoundException;
-import com.example.cms.model.entity.TestResults;
-import com.example.cms.model.entity.Skintype;
+import com.example.cms.model.entity.*;
 import com.example.cms.model.repository.*;
 import com.example.cms.controller.Dto.TestResultsDto;
-import com.example.cms.model.entity.User;
 import com.example.cms.model.service.SkinCareRountineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.cms.model.entity.Product;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -28,18 +26,21 @@ public class TestResultsController {
     private final SkintypeRepository skintypeRepository;
     private final IngredientRepository ingredientRepository;
     private final SkinCareRountineService skinCareRountineService;
+    private final ConcernRepository concernRepository;
 
     @Autowired
     public TestResultsController(TestResultsRepository testResultsRepository,
                                  UserRepository userRepository,
                                  SkintypeRepository skintypeRepository,
                                  IngredientRepository ingredientRepository,
-                                 SkinCareRountineService skinCareRountineService) {
+                                 SkinCareRountineService skinCareRountineService,
+                                 ConcernRepository concernRepository) {
         this.testResultsRepository = testResultsRepository;
         this.userRepository = userRepository;
         this.skintypeRepository = skintypeRepository;
         this.ingredientRepository = ingredientRepository;
         this.skinCareRountineService = skinCareRountineService;
+        this.concernRepository = concernRepository;
     }
 
     //-------------------Get Mapping---------------
@@ -71,19 +72,14 @@ public class TestResultsController {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
-        //Get list of recommendations and stream to DTO
-        List<ProductDto> recommendations = user.getTestResults().getRecommendedProducts().stream()
-                 .map(product -> new ProductDto(
-                         product.getProductId(),
-                         product.getName(),
-                         product.getBrand(),
-                         product.getPrice(),
-                         product.getImageURL()
-                 ))
-                 .collect(Collectors.toList());
+        // get user's testResult
+        TestResults userTestResults = user.getTestResults();
+        if (userTestResults == null) {
+            throw new RuntimeException("No test results found for user with id: " + userId);
+        }
 
-        //Return recommended products
-        return recommendations;
+        // Convert Product entities to DTOs using the service method
+        return skinCareRountineService.getProductDtos(userTestResults.getRecommendedProducts());
     }
 
     //-------------------Post Mapping---------------
@@ -94,10 +90,12 @@ public class TestResultsController {
         {
             "skinType" : 1,
             "avoidIngredients": [1,2],
+            "concerns": [1, 2]
             "budget" : 20,
             "user" : "00001"
         }
 	    */
+
         //Fetch user from the database
         User user = userRepository.findById(testResultsDTO.getUser())
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + testResultsDTO.getUser()));
@@ -113,12 +111,15 @@ public class TestResultsController {
 
         //Set the user in test results
         testResult.setUser(user);
+
         //Set budget
         testResult.setBudget(testResultsDTO.getBudget());
+
         //Set skin type
         Skintype skintype = skintypeRepository.findById(testResultsDTO.getSkinType())
                 .orElseThrow(() -> new RuntimeException("Skintype not found with id: " + testResultsDTO.getSkinType()));;
         testResult.setSkinType(skintype);
+
         //Set avoid ingredients
         testResult.setAvoidIngredients(
                 testResultsDTO.getAvoidIngredients().stream()
@@ -127,32 +128,41 @@ public class TestResultsController {
                         .collect(Collectors.toList())
         );
 
+        // Set concerns
+        testResult.setConcerns(
+                testResultsDTO.getConcerns().stream()
+                        .map(concernId -> this.concernRepository.findById(concernId)
+                                .orElseThrow(() -> new RuntimeException("concern with ID " + concernId + " not found")))
+                        .collect(Collectors.toList())
+        );
+
         //-----------Call matching algorithm before saving--------
-        matchingAlgorithm(testResult);//-------Placeholder for actual service!
+        // Use the skincare service to match products for the user
+        this.skinCareRountineService.matchProducts(testResult);
 
         //Save the test result
-        TestResults savedResult = testResultsRepository.save(testResult);
+        TestResults savedResult = this.testResultsRepository.save(testResult);
 
         //Set the test results in user
         user.setTestResults(testResult);
-        userRepository.save(user);
+        this.userRepository.save(user);
 
         //Return TestResults
         return savedResult;
     }
 
-    // match products
-    private List<ProductDto> matchingAlgorithm(TestResults testResult) {
-        //Logic to assign recommended products
-        List<Product> recommendedProducts = new ArrayList<>();
-
-        //------...---------
-
-        //Set products list
-        testResult.setRecommendedProducts(recommendedProducts);
-
-        return this.skinCareRountineService.matchProducts();
-    }
+//    // match products
+//    private List<ProductDto> matchingAlgorithm(TestResults testResult) {
+//        //Logic to assign recommended products
+//        List<Product> recommendedProducts = new ArrayList<>();
+//
+//        //------...---------
+//
+//        //Set products list
+//        testResult.setRecommendedProducts(recommendedProducts);
+//
+//        return this.skinCareRountineService.matchProducts();
+//    }
 
     //-------------------Delete Mapping---------------
     @DeleteMapping("/{id}")
