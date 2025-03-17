@@ -1,6 +1,8 @@
 package com.example.cms.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -89,6 +91,7 @@ public class Product {
             joinColumns = @JoinColumn(name = "productId"),
             inverseJoinColumns = @JoinColumn(name = "altProdId")
     )
+    @JsonIgnore
     private Set<Product> alternatives;
 
     public Product(long productId, String name, String brand, Double price,

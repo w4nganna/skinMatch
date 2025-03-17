@@ -3,6 +3,7 @@ import com.example.cms.controller.Dto.ReviewDto;
 import com.example.cms.controller.exceptions.UserNotFoundException;
 import com.example.cms.controller.exceptions.ProductNotFoundException;
 import com.example.cms.model.repository.ReviewRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.cms.model.entity.ReviewKey;
 import com.example.cms.model.entity.Product;
@@ -30,9 +31,10 @@ public class ReviewController {
         this.productRepository = productRepository;
     }
     //Read all reviews for a product
-    @GetMapping("/reviews/{productId}/{userId}")
-    public List<Review> getReviewsByProduct(@PathVariable Long productId, @PathVariable String userId) {
-        List<Review> reviews = reviewRepository.findByProductId(productId, userId);
+    @GetMapping("/reviews/{productId}")
+    public List<Review> getReviewsByProduct(@PathVariable Long productId) {
+
+        List<Review> reviews = reviewRepository.findByProductId(productId);
 
         if (reviews.isEmpty()) {
             throw new RuntimeException("No reviews found for productId: " + productId);
@@ -70,17 +72,16 @@ public class ReviewController {
 
     //update review
     @PutMapping("/reviews/{productId}/{userId}")
-    Review updateReview(@RequestBody ReviewDto reviewDto, @PathVariable Long productId, @PathVariable String userId){
-        return reviewRepository.findById(new ReviewKey(userId, productId))
-                .map(review -> {
-                    review.setReviewId(new ReviewKey(reviewDto.getUserId(), reviewDto.getProductId()));
+    public ResponseEntity<Review> updateReview(@RequestBody ReviewDto reviewDto, @PathVariable Long productId, @PathVariable String userId) {
+        // Validate request body
+        if (reviewDto == null) {
+            return ResponseEntity.badRequest().build(); // Return 400 Bad Request if body is missing
+        }
 
-                    review.setUser(userRepository.findById(reviewDto.getUserId()).orElseThrow(
-                            () -> new UserNotFoundException(reviewDto.getUserId())
-                    ));
-                    review.setProduct(productRepository.findById(reviewDto.getProductId()).orElseThrow(
-                            () -> new ProductNotFoundException(reviewDto.getProductId())
-                    ));
+        ReviewKey reviewKey = new ReviewKey(userId, productId);
+
+        Review updatedReview = reviewRepository.findById(reviewKey)
+                .map(review -> {
                     review.setReviewBody(reviewDto.getReviewBody());
                     review.setScore(reviewDto.getScore());
                     review.setDate(reviewDto.getDate());
@@ -88,20 +89,23 @@ public class ReviewController {
                 })
                 .orElseGet(() -> {
                     Review review = new Review();
-                    review.setReviewId(new ReviewKey(reviewDto.getUserId(), reviewDto.getProductId()));
-                    User user = userRepository.findById(reviewDto.getUserId()).orElseThrow(
-                            () -> new UserNotFoundException(reviewDto.getUserId())
-                    );
-                    Product product = productRepository.findById(reviewDto.getProductId()).orElseThrow(
-                            () -> new ProductNotFoundException(reviewDto.getProductId())
-                    );
+                    review.setReviewId(reviewKey);
+
+                    User user = userRepository.findById(userId)
+                            .orElseThrow(() -> new UserNotFoundException(userId));
+                    Product product = productRepository.findById(productId)
+                            .orElseThrow(() -> new ProductNotFoundException(productId));
+
                     review.setUser(user);
                     review.setProduct(product);
                     review.setReviewBody(reviewDto.getReviewBody());
                     review.setScore(reviewDto.getScore());
                     review.setDate(reviewDto.getDate());
+
                     return reviewRepository.save(review);
                 });
+
+        return ResponseEntity.ok(updatedReview);
     }
 
     @DeleteMapping("/reviews/{productId}/{userId}")

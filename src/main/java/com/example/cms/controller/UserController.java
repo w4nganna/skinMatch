@@ -65,14 +65,19 @@ public class UserController {
     public Set<ProductDto> getFavProds(@PathVariable String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
-        Set<ProductDto> favProds = user.getFavourites().stream()
+
+        return user.getFavourites().stream()
                 .map(product -> new ProductDto(
                         product.getProductId(),
                         product.getName(),
                         product.getBrand(),
                         product.getPrice(),
-                        product.getImageURL())).collect(Collectors.toSet());
-        return favProds;
+                        product.getImageURL(),
+                        product.getAlternatives().stream()
+                                .map(Product::getProductId) // Extract alternative product IDs
+                                .collect(Collectors.toList())
+                ))
+                .collect(Collectors.toSet());
     }
 
     //-------------------Put------------------
