@@ -176,7 +176,10 @@ public class SkinCareRountineService {
                         product.getName(),
                         product.getBrand(),
                         product.getPrice(),
-                        product.getImageURL()
+                        product.getImageURL(),
+                        product.getAlternatives().stream()
+                                .map(Product::getProductId) // Extract alternative product IDs
+                                .collect(Collectors.toList())
                 ))
                 .collect(Collectors.toList());
     }
