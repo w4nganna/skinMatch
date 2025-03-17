@@ -48,6 +48,9 @@ public class Product {
     @NotEmpty
     private String imageURL;
 
+    @Transient  // NOT stored in the database
+    private Double averageScore;
+
     // Add @JsonIgnore to break the circular reference
     // Many-to-Many relationship with TestResults
     @ManyToMany(mappedBy = "recommendedProducts")

@@ -39,4 +39,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             @Param("avoidIngredients") List<Long> avoidIngredients,
             @Param("sortBy") String sortBy
     );
+    //------------Product average Rating -----------
+    @Query("SELECT COALESCE(AVG(r.score), 0) FROM Review r WHERE r.reviewId.productId = :productId")
+    Double findAverageScoreByProductId(@Param("productId") Long productId);
 }

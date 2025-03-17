@@ -16,6 +16,7 @@ public class ProductDto {
     private String brand;
     private Double price;
     private String imageURL;
+    private Double averageScore;
     private List<Long> alternativeProductsId;
 
     public static ProductDto fromEntity(Product product) {
@@ -25,6 +26,7 @@ public class ProductDto {
                 product.getBrand(),
                 product.getPrice(),
                 product.getImageURL(),
+                product.getAverageScore(),
                 product.getAlternatives().stream()
                         .map(Product::getProductId)
                         .collect(Collectors.toList())

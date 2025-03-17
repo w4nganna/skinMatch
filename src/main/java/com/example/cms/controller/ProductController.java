@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.cms.model.repository.ProductRepository;
+import com.example.cms.model.repository.ReviewRepository;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,11 +26,13 @@ public class ProductController {
     //Declare product search service object
     private final ProductSearchService productSearchService;
     private final ProductRepository productRepository;
+    private final ReviewRepository reviewRepository;
 
     //Set constructor
-    public ProductController(ProductSearchService productSearchService, ProductRepository productRepository) {
+    public ProductController(ProductSearchService productSearchService, ProductRepository productRepository, ReviewRepository reviewRepository) {
         this.productSearchService = productSearchService;
         this.productRepository = productRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     //-----------------GET------------------
@@ -37,26 +40,42 @@ public class ProductController {
     @GetMapping("/products")
     public List<ProductDto> getAllProducts() {
         return productRepository.findAll().stream()
-                .map(product -> new ProductDto(
-                        product.getProductId(),
-                        product.getName(),
-                        product.getBrand(),
-                        product.getPrice(),
-                        product.getImageURL(),
-                        product.getAlternatives().stream()
-                                .map(Product:: getProductId)   //convert alts to a list of ids
-                                .collect(Collectors.toList())
-                ))
+                .map(product -> {
+                    // Fetch the average score from the ReviewRepository
+                    Double avgScore = reviewRepository.findAverageScoreByProductId(product.getProductId());
+                    product.setAverageScore(avgScore);
+
+                    return new ProductDto(
+                            product.getProductId(),
+                            product.getName(),
+                            product.getBrand(),
+                            product.getPrice(),
+                            product.getImageURL(),
+                            avgScore, // Use the computed value
+                            product.getAlternatives().stream()
+                                    .map(Product::getProductId)
+                                    .collect(Collectors.toList())
+                    );
+                })
                 .collect(Collectors.toList());
     }
+
 
     // Get product by ID
     @GetMapping("/products/{productId}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
+
+        // Fetch the average score from ReviewRepository
+        Double avgScore = reviewRepository.findAverageScoreByProductId(productId);
+
+        // Set the computed score before returning
+        product.setAverageScore(avgScore);
+
         return ResponseEntity.ok(ProductDto.fromEntity(product));
     }
+
 
     @GetMapping("/products/{productId}/alt")
     public ResponseEntity<List<ProductDto>> getProductAltById(@PathVariable Long productId) {
@@ -96,5 +115,6 @@ public class ProductController {
             @RequestParam(required = false) List<Integer> concerns) {
         return productSearchService.getFilteredProductsII(maxPrice, sortBy, category, brands, types, avoidIngredients, concerns);
     }
+
 
 }
