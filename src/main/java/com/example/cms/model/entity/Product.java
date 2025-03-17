@@ -48,6 +48,9 @@ public class Product {
     @NotEmpty
     private String imageURL;
 
+    @Transient  // NOT stored in the database
+    private Double averageScore;
+
     // Many-to-Many relationship with TestResults
     @ManyToMany(mappedBy = "recommendedProducts")
     private List<TestResults> testResults  = new ArrayList<>();
