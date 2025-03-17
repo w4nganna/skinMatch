@@ -28,25 +28,6 @@ public class SkinCareRountineService {
     *
     * */
 
-    // fetch all products
-    //List<Product> products = productRepository.findAll();
-
-//    public List<ProductDto> matchProducts() {
-//        // temp init Dto (to make system not report red err
-//        // when modify later.
-//        long id = 111;
-//        String name = "";
-//        String brand = "";
-//        Double price = 0.0;
-//        String imageURL = "";
-//        ProductDto productDto = new ProductDto(id, name, brand, price, imageURL);
-//
-//        List<ProductDto> list = new ArrayList<>();
-//        list.add(productDto);
-//
-//        return list;
-//    }
-
     public void matchProducts(TestResults testResult) {
         // Get all products from the repository
         List<Product> allProducts = productRepository.findAll();
