@@ -22,8 +22,9 @@ public class TestResults {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long testResultId;
 
-    // One-to-one relationship with User
-    @OneToOne(mappedBy = "testResults")
+    // One-to-one relationship with User - TestResults owns the relationship
+    // Use @JsonIgnore for user to break circular reference
+    @OneToOne
     @JsonIgnore
     private User user;
 

@@ -48,8 +48,10 @@ public class Product {
     @NotEmpty
     private String imageURL;
 
+    // Add @JsonIgnore to break the circular reference
     // Many-to-Many relationship with TestResults
     @ManyToMany(mappedBy = "recommendedProducts")
+    @JsonIgnore
     private List<TestResults> testResults  = new ArrayList<>();
 
     //Many-to-Many relationship with Ingredients

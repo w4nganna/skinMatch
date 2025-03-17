@@ -37,8 +37,10 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "testResultsId")
+    // User has a reference to TestResults, but TestResults owns the relationship
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(name = "testResultsId")
     @JsonIgnore //Prevent recursion issues - Don't return test results when getting user
     private TestResults testResults;
 

@@ -1,3 +1,8 @@
+----------------Test Results-----------------
+---- Create TestResults first
+--INSERT INTO testResults (testResultId, budget) VALUES   (1, 100.0),
+--                                                        (2, 150.0);
+
 ----------------User-----------------
 INSERT INTO users(userId, email, password) VALUES('00001', 'jialuo.chen@mail.utoronto.ca', '1111');
 INSERT INTO users(userId, email, password) VALUES('00002', 'lea.kwon@mail.utoronto.ca', '1234');

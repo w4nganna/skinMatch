@@ -43,8 +43,8 @@ public class SkinCareRountineService {
 
         // Filter products based on user's skin type and ingredients to avoid
         List<Product> filteredProducts = allProducts.stream()
-                .filter(product -> matchesSkinType(product, skinTypeDescription))
-                .filter(product -> !containsAnyAvoidIngredient(product, avoidIngredients))
+                .filter(product -> this.matchesSkinType(product, skinTypeDescription))
+                .filter(product -> !this.containsAnyAvoidIngredient(product, avoidIngredients))
                 .collect(Collectors.toList());
 
         // Group filtered products by category
