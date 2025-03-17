@@ -9,6 +9,7 @@ import com.example.cms.model.entity.Product;
 import com.example.cms.model.service.ProductSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.cms.model.repository.ProductRepository;
 
@@ -41,32 +42,34 @@ public class ProductController {
                         product.getName(),
                         product.getBrand(),
                         product.getPrice(),
-                        product.getImageURL()
+                        product.getImageURL(),
+                        product.getAlternatives().stream()
+                                .map(Product:: getProductId)   //convert alts to a list of ids
+                                .collect(Collectors.toList())
                 ))
                 .collect(Collectors.toList());
     }
 
     // Get product by ID
     @GetMapping("/products/{productId}")
-    public Product getProductById(@PathVariable Long productId) {
-        return productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found with ID: " + productId));
+    public ResponseEntity<ProductDto> getProductById(@PathVariable Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+        return ResponseEntity.ok(ProductDto.fromEntity(product));
     }
 
-    //Get product alternatives
     @GetMapping("/products/{productId}/alt")
-    public Set<ProductDto> getProdAlts(@PathVariable Long productId) {
-        Product prod = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException(productId));
-        Set<ProductDto> prodAlts = prod.getAlternatives().stream()
-                .map(product -> new ProductDto(
-                        product.getProductId(),
-                        product.getName(),
-                        product.getBrand(),
-                        product.getPrice(),
-                        product.getImageURL())).collect(Collectors.toSet());
-        return prodAlts;
+    public ResponseEntity<List<ProductDto>> getProductAltById(@PathVariable Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId));
+
+        // Convert the alternatives to DTOs to avoid recursion issues
+        List<ProductDto> alternatives = product.getAlternatives().stream()
+                .map(ProductDto::fromEntity) // Convert Product to ProductDto
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(alternatives);
+
     }
+
 
     //------------Product search method I: Java filter-----------
     @GetMapping("/products/filterI")
