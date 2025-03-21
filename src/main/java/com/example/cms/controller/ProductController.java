@@ -51,6 +51,7 @@ public class ProductController {
                             product.getBrand(),
                             product.getPrice(),
                             product.getImageURL(),
+                            product.getIngredients(),
                             avgScore, // Use the computed value
                             product.getAlternatives().stream()
                                     .map(Product::getProductId)
@@ -88,7 +89,6 @@ public class ProductController {
         return ResponseEntity.ok(alternatives);
 
     }
-
 
     //------------Product search method I: Java filter-----------
     @GetMapping("/products/filterI")

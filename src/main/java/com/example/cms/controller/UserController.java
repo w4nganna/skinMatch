@@ -73,6 +73,7 @@ public class UserController {
                         product.getBrand(),
                         product.getPrice(),
                         product.getImageURL(),
+                        product.getIngredients(),
                         product.getAverageScore(),
                         product.getAlternatives().stream()
                                 .map(Product::getProductId) // Extract alternative product IDs
@@ -165,7 +166,7 @@ public class UserController {
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    //Add or Remove favourite product
+    //Add or delete favourite product
     @PutMapping("/users/{userId}/favs/{productId}")
     public ResponseEntity<String> updateFavProds(@PathVariable("userId") String userId, @PathVariable("productId") Long productId) {
         //Find user
