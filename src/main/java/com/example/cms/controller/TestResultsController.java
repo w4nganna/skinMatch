@@ -69,14 +69,14 @@ public class TestResultsController {
     }
 
     //get list of test results with userId
-    @GetMapping("/users/{userId}")
-    public List<TestResults> getTestResultsById(@RequestParam("id") Long id) {
-        List<TestResults> testResults = testResultsRepository.findAll();
-        if (testResults.isEmpty()) {
-            throw new RuntimeException("No test results found.");
-        }
-        return testResults;
-    }
+   // @GetMapping("/users/{userId}")
+    //public List<TestResults> getTestResultsById(@RequestParam("id") Long id) {
+        //List<TestResults> testResults = testResultsRepository.findAll();
+        //if (testResults.isEmpty()) {
+            //throw new RuntimeException("No test results found.");
+        //}
+        //return testResults;
+    //}
 
     //Recommended Products by userId
     @GetMapping("/users/{userId}/recommendations")
