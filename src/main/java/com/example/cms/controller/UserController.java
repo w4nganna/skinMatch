@@ -174,6 +174,7 @@ public class UserController {
         //Find product
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
+
         //Remove if already favourited
         if (user.getFavourites().contains(product)) {
             //update user
