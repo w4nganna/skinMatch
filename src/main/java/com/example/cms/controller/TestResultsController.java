@@ -165,27 +165,8 @@ public class TestResultsController {
         );
 
         //-----------Call matching algorithm before saving--------
-//        // Save the test result first to get an ID
-//        TestResults savedResult = this.testResultsRepository.save(testResult);
-
         // Critical: Establish relationship before saving
         testResult.setUser(user);
-//        user.setTestResults(savedResult);
-//
-//        // Now let Hibernate generate the ID and save
-//        TestResults savedResult = testResultsRepository.save(testResult);
-//
-//        //Save the test result
-////        TestResults savedResult = this.testResultsRepository.save(testResult);\
-//
-//        // Now establish the bidirectional relationship
-//        user.setTestResults(savedResult);
-//        userRepository.save(user);
-
-//        // Save both entities to persist the relationship
-//        this.testResultsRepository.save(savedResult);
-//        this.userRepository.save(user);
-
 
         // First save the user with the relationship to ensure everything is consistent
         userRepository.save(user);
