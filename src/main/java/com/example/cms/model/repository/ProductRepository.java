@@ -42,4 +42,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     //------------Product average Rating -----------
     @Query("SELECT COALESCE(AVG(r.score), 0) FROM Review r WHERE r.reviewId.productId = :productId")
     Double findAverageScoreByProductId(@Param("productId") Long productId);
+    
+    // ----------------Find unique brands-----------
+    @Query(value = "SELECT DISTINCT p.brand FROM products p", nativeQuery = true)
+    List<String> findAllBrands();
 }

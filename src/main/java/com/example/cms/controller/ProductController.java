@@ -90,6 +90,12 @@ public class ProductController {
 
     }
 
+    //Get all unique brands
+    @GetMapping("/products/brands")
+    public List<String> findAllBrands() {
+        return productRepository.findAllBrands();
+    }
+
     //------------Product search method I: Java filter-----------
     @GetMapping("/products/filterI")
     public List<ProductDto> getFilteredProductsI(
