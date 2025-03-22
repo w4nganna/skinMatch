@@ -50,7 +50,7 @@ public class TestResults {
     @JoinTable(
             name = "userAvoidList",
             joinColumns = @JoinColumn(name = "testResultId"),
-            inverseJoinColumns = @JoinColumn(name = "ingredientId")
+            inverseJoinColumns = @JoinColumn(name = "avoidIngredientId")
     )
     private List<Ingredient> avoidIngredients = new ArrayList<>();
 

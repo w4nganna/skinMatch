@@ -6,6 +6,7 @@
 ----------------User-----------------
 INSERT INTO users(userId, email, password) VALUES('00001', 'jialuo.chen@mail.utoronto.ca', '1111');
 INSERT INTO users(userId, email, password) VALUES('00002', 'lea.kwon@mail.utoronto.ca', '1234');
+INSERT INTO users(userId, email, password) VALUES('00003', 'user.testing@mail.utoronto.ca', '2222');
 
 ----------------Skintypes-----------------
 INSERT INTO skintypes(skintypeId, description) VALUES (1, 'Oily');
@@ -19,6 +20,13 @@ INSERT INTO concerns(concernId, description) VALUES (3, 'Pores');
 INSERT INTO concerns(concernId, description) VALUES (4, 'Hyperpigmentation');
 INSERT INTO concerns(concernId, description) VALUES (5, 'Irritation');
 INSERT INTO concerns(concernId, description) VALUES (6, 'Dull skin');
+
+----------------Categories-----------------
+INSERT INTO categories(categoryId, categoryName) VALUES (1, 'Sunscreen');
+INSERT INTO categories(categoryId, categoryName) VALUES (2, 'Cleanser');
+INSERT INTO categories(categoryId, categoryName) VALUES (3, 'Toner');
+INSERT INTO categories(categoryId, categoryName) VALUES (4, 'Moisturizer');
+INSERT INTO categories(categoryId, categoryName) VALUES (5, 'Exfoliator');
 
 ----------------Products-----------------
 INSERT INTO products (productId, name, brand, price, category, type, imageURL)
@@ -134,3 +142,4 @@ VALUES
     ('00002', 1, 'This product did not work for me', 2, '2025-Jan-03'),
     ('00001', 2, 'This product was okay', 3, '2024-Feb-19'),
     ('00002', 2, 'no thanks', 1, '2023-April-01');
+

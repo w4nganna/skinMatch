@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -82,6 +80,30 @@ public class TestResultsController {
 
         // Convert Product entities to DTOs using the service method
         return skinCareRountineService.getProductDtos(userTestResults.getRecommendedProducts());
+    }
+
+    //Skincare concerns by userId
+    @GetMapping("/users/{userId}/concerns")
+    public List<Concern> getConcernsByUserId(@PathVariable String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+        TestResults userTestResults = user.getTestResults();
+        if (userTestResults == null) {
+            throw new RuntimeException("No test results found for user with id: " + userId);
+        }
+        return userTestResults.getConcerns();
+    }
+
+    //Avoid ingredients by userId
+    @GetMapping("/users/{userId}/avoid")
+    public List<Ingredient> getAvoidIngredientsByUserId(@PathVariable String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+        TestResults userTestResults = user.getTestResults();
+        if (userTestResults == null) {
+            throw new RuntimeException("No test results found for user with id: " + userId);
+        }
+        return userTestResults.getAvoidIngredients();
     }
 
     //-------------------Post Mapping---------------
@@ -208,6 +230,36 @@ public class TestResultsController {
         dto.setConcernNames(concernNames);
 
         return dto;
+    }
+
+    //Put concerns by userId
+    @PostMapping("/users/{userId}/concerns")
+    public List<Concern> updateConcernsByUserId(@PathVariable String userId,
+                                                @RequestBody TestResultsDto testResultsDTO) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+        TestResults userTestResults = user.getTestResults();
+        if (userTestResults == null) {
+            throw new RuntimeException("No test results found for user with id: " + userId);
+        }
+        userTestResults.setConcerns(concernRepository.findAllById(testResultsDTO.getConcerns()));
+        userRepository.save(user);
+        return userTestResults.getConcerns();
+    }
+
+    //Put avoidIngredients by userId
+    @PostMapping("/users/{userId}/avoid")
+    public List<Ingredient> updateAvoidIngredientsByUserId(@PathVariable String userId,
+                                                           @RequestBody TestResultsDto testResultsDTO) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+        TestResults userTestResults = user.getTestResults();
+        if (userTestResults == null) {
+            throw new RuntimeException("No test results found for user with id: " + userId);
+        }
+        userTestResults.setAvoidIngredients(ingredientRepository.findAllById(testResultsDTO.getAvoidIngredients()));
+        userRepository.save(user);
+        return userTestResults.getAvoidIngredients();
     }
 
     //-------------------Delete Mapping---------------

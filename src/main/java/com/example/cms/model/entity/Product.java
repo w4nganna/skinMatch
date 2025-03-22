@@ -3,6 +3,7 @@ package com.example.cms.model.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.example.cms.model.entity.Category;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,8 +40,9 @@ public class Product {
     @NotNull
     private Double price;
 
-    @NotEmpty
-    private String category;
+    @ManyToOne
+    @JoinColumn(name = "categoryId")
+    private Category category;
 
     @NotEmpty
     private String type;
@@ -86,7 +88,7 @@ public class Product {
 
     //Many-to-Many relationship with products
     @JsonBackReference
-    @ManyToMany(mappedBy = "favourites")
+    @ManyToMany(mappedBy = "productId")
     private Set<User> users = new HashSet<>();
 
     //Many-to-Many relationship of alternative products
@@ -100,7 +102,7 @@ public class Product {
     private Set<Product> alternatives;
 
     public Product(long productId, String name, String brand, Double price,
-                   String category, String type, String imageURL, List<TestResults> testResults,
+                   Category category, String type, String imageURL, List<TestResults> testResults,
                    List<Ingredient> ingredients, List<Concern> concerns, List<Skintype> skintypes) {
         this.productId = productId;
         this.name = name;

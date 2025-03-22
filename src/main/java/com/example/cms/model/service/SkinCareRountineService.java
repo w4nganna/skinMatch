@@ -1,10 +1,7 @@
 package com.example.cms.model.service;
 
 import com.example.cms.controller.Dto.ProductDto;
-import com.example.cms.model.entity.Concern;
-import com.example.cms.model.entity.Ingredient;
-import com.example.cms.model.entity.Product;
-import com.example.cms.model.entity.TestResults;
+import com.example.cms.model.entity.*;
 import com.example.cms.model.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -48,7 +45,7 @@ public class SkinCareRountineService {
                 .collect(Collectors.toList());
 
         // Group filtered products by category
-        Map<String, List<Product>> productsByCategory = filteredProducts.stream()
+        Map<Category, List<Product>> productsByCategory = filteredProducts.stream()
                 .collect(Collectors.groupingBy(Product::getCategory));
 
         // Selected products for the routine (one per category)
@@ -119,7 +116,7 @@ public class SkinCareRountineService {
 
     // Adjust product selection to stay within budget
     private void adjustSelectionForBudget(List<Product> selectedProducts,
-                                          Map<String, List<Product>> productsByCategory,
+                                          Map<Category, List<Product>> productsByCategory,
                                           Float maxBudget,
                                           List<Concern> userConcerns) {
         // Calculate total cost of selected products
@@ -134,7 +131,7 @@ public class SkinCareRountineService {
 
             for (int i = 0; i < selectedProducts.size() && totalCost > maxBudget; i++) {
                 Product currentProduct = selectedProducts.get(i);
-                String category = currentProduct.getCategory();
+                Category category = currentProduct.getCategory();
 
                 // Find cheaper alternatives in the same category
                 List<Product> alternatives = productsByCategory.getOrDefault(category, Collections.emptyList()).stream()

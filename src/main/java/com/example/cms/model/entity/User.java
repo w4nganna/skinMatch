@@ -48,7 +48,7 @@ public class User {
     @JsonManagedReference
     @ManyToMany()
     @JoinTable(
-            name = "user_favourites",
+            name = "userFavourites",
             joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "productId")
     )

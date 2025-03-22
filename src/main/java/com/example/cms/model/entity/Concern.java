@@ -30,12 +30,12 @@ public class Concern {
     private String description;
 
     // Many-to-Many relationship with TestResults
-    @ManyToMany(mappedBy = "concerns")
+    @ManyToMany(mappedBy = "concernId")
     @JsonIgnore
     private List<TestResults> testResults  = new ArrayList<>();
 
     // Many-to-Many relationship with Product
-    @ManyToMany(mappedBy = "concerns")
+    @ManyToMany(mappedBy = "concernId")
     @JsonIgnore
     private List<Product> products  = new ArrayList<>();
 
