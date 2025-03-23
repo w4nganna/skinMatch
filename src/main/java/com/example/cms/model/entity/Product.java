@@ -88,7 +88,7 @@ public class Product {
 
     //Many-to-Many relationship with products
     @JsonBackReference
-    @ManyToMany(mappedBy = "productId")
+    @ManyToMany(mappedBy = "favourites")
     private Set<User> users = new HashSet<>();
 
     //Many-to-Many relationship of alternative products

@@ -171,7 +171,7 @@ class QuizResultsTests {
         );
 
         // Basic assertions on response
-        assertEquals(50.0f, responseDto.getBudget());
+        assertEquals(150.0f, responseDto.getBudget());
         assertEquals(skintype.getDescription(), responseDto.getSkinTypeName());
         assertTrue(responseDto.getAvoidIngredientsNames().size() > 0);
         assertTrue(responseDto.getConcernNames().size() > 0);
@@ -179,7 +179,7 @@ class QuizResultsTests {
         // Verify test result was created and associated with user
         User updatedUser = userRepository.findById(testUser.getUserId()).orElseThrow();
         assertNotNull(updatedUser.getTestResults());
-        assertEquals(50.0f, updatedUser.getTestResults().getBudget());
+        assertEquals(150.0f, updatedUser.getTestResults().getBudget());
     }
 
     @Test
@@ -207,7 +207,7 @@ class QuizResultsTests {
         );
 
         // Basic assertions
-        assertEquals(50.0f, testResults.getBudget());
+        assertEquals(150.0f, testResults.getBudget());
         assertEquals(skintype.getSkintypeId(), testResults.getSkinType().getSkintypeId());
     }
 

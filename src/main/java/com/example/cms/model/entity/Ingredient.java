@@ -25,12 +25,12 @@ public class Ingredient{
     private String ingredientName;
 
     //Many-to-Many relationship with Products
-    @ManyToMany(mappedBy = "ingredientId")
+    @ManyToMany(mappedBy = "ingredients")
     @JsonIgnore
     private List<Product> products  = new ArrayList<>();
 
     //Many-to-Many relationship with TestResults
-    @ManyToMany(mappedBy = "avoidIngredientId")
+    @ManyToMany(mappedBy = "avoidIngredients")
     @JsonIgnore
     private List<TestResults> testResults  = new ArrayList<>();
 
