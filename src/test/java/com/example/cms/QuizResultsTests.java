@@ -229,6 +229,8 @@ class QuizResultsTests {
         // We only check the status since recommendations depend on your matching algorithm
     }
 
+    // result test has issues need to fix
+
     @Test
     void testUpdateConcerns() throws Exception {
         // First create a test result
