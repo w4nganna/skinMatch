@@ -29,12 +29,8 @@ public class Skintype {
     private String description;
 
     // Many-to-Many relationship with Product
-//<<<<<<< HEAD
-//    @ManyToMany(mappedBy = "skintypes")
-    @JsonIgnore
-//=======
     @ManyToMany(mappedBy = "skintypes")
-//>>>>>>> 247a1d0 (6.3.7 updates)
+    @JsonIgnore
     private List<Product> products  = new ArrayList<>();
 
     public Skintype(int id, String description)
