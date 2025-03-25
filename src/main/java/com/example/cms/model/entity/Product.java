@@ -77,6 +77,7 @@ public class Product {
     )
     private List<Concern> concerns;
 
+
     //Many-to-Many relationship with Skintype
     @ManyToMany
     @JoinTable(
@@ -98,6 +99,7 @@ public class Product {
             joinColumns = @JoinColumn(name = "productId"),
             inverseJoinColumns = @JoinColumn(name = "altProdId")
     )
+
     @JsonIgnore
     private Set<Product> alternatives;
 

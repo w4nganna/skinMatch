@@ -30,7 +30,6 @@ INSERT INTO categories(categoryId, categoryName) VALUES (5, 'Exfoliator');
 
 ----------------Products-----------------
 INSERT INTO products (productId, name, brand, price, categoryId, type, imageURL)
-
 VALUES
     (1, 'ultra fluid', 'La Roche-Posay', 30.50, 1, 'normal', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s'),
     (2, 'Anthelios Melt-in Milk Sunscreen SPF 60', 'La Roche-Posay', 36.99, 1, 'dry', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s'),
@@ -132,6 +131,11 @@ INSERT INTO ProductIngredients (productId, ingredientId) VALUES (25, 1), (25, 3)
                                                                  (26, 1), (26, 4), (26, 5); -- Daily Microfoliant Exfoliator
 
 
+----------------Product Type-----------------
+INSERT INTO userSkintype (productId, skintypeId) VALUES (1,1), (3,1), (4,1), (9,1), (10,1);
+INSERT INTO userSkintype (productId, skintypeId) VALUES (2,2), (7,2), (8,2), (13,2), (14,2), (19,2), (20,2);
+INSERT INTO userSkintype (productId, skintypeId) VALUES (5,3), (6,3), (11,3), (12,3), (17,3), (18,3), (23,3), (24,3), (25,3), (26,3);
+INSERT INTO userSkintype (productId, skintypeId) VALUES (15,1), (16,1), (21,1), (22,1);
 
 ----------------Reviews-----------------
 INSERT INTO reviews (userId, productId, reviewBody, score, date)
