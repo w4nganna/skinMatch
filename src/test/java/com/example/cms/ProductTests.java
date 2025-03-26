@@ -1,6 +1,6 @@
 package com.example.cms;
 
-/**import com.example.cms.model.entity.User;
+import com.example.cms.model.entity.User;
 import com.example.cms.model.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -69,4 +69,3 @@ class ProductTests {
     }
 }
 
-*/
