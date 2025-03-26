@@ -78,7 +78,7 @@ class ReviewTests {
         reviewRepository.save(review);
 
         MockHttpServletResponse response = mockMvc.perform(
-                        delete("/reviews/00001/1"))
+                        delete("/reviews/1/00001"))
                 .andReturn().getResponse();
 
         assertEquals(200, response.getStatus());
