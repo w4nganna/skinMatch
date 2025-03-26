@@ -3,6 +3,10 @@ package com.example.cms.controller;
 import com.example.cms.controller.Dto.ProductDto;
 import com.example.cms.controller.exceptions.ProductNotFoundException;
 import com.example.cms.controller.exceptions.UserNotFoundException;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
+
 import com.example.cms.model.entity.User;
 import com.example.cms.model.repository.UserRepository;
 import com.example.cms.model.entity.Product;
@@ -115,7 +119,8 @@ public class ProductController {
             @RequestParam(required = false) Double maxPrice,
             @RequestParam(required = false) String sortBy,
             @RequestParam(required = false) Integer category,
-            @RequestParam(required = false) List<String> brands,
+            @RequestParam(required = false)
+            List<String> brands,
             @RequestParam(required = false) List<String> types,
             @RequestParam(required = false) List<Long> avoidIngredients,
             @RequestParam(required = false) List<Integer> concerns) {
@@ -124,3 +129,4 @@ public class ProductController {
 
 
 }
+
