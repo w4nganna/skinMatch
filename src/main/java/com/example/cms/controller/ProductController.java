@@ -101,12 +101,12 @@ public class ProductController {
     public List<ProductDto> getFilteredProductsI(
             @RequestParam(required = false) Double maxPrice,
             @RequestParam(required = false) String sortBy,
-            @RequestParam(required = false) Integer category,
+            @RequestParam(required = false) List<Integer> categories,
             @RequestParam(required = false) List<String> brands,
-            @RequestParam(required = false) List<String> types,
+            @RequestParam(required = false) List<Integer> types,
             @RequestParam(required = false) List<Long> avoidIngredients,
             @RequestParam(required = false) List<Integer> concerns) {
-        return productSearchService.getFilteredProductsI(maxPrice, sortBy, category, brands, types, avoidIngredients, concerns);
+        return productSearchService.getFilteredProductsI(maxPrice, sortBy, categories, brands, types, avoidIngredients, concerns);
     }
 
     //------------Product search method II: SQL filter-----------

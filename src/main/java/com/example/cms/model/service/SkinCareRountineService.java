@@ -40,7 +40,7 @@ public class SkinCareRountineService {
 
         // Filter products based on user's skin type and ingredients to avoid
         List<Product> filteredProducts = allProducts.stream()
-                .filter(product -> this.matchesSkinType(product, skinTypeDescription))
+               // .filter(product -> this.matchesSkinType(product, skinTypeDescription))
                 .filter(product -> !this.containsAnyAvoidIngredient(product, avoidIngredients))
                 .collect(Collectors.toList());
 
@@ -75,11 +75,11 @@ public class SkinCareRountineService {
     }
 
     // Check if product matches the user's skin type
-    private boolean matchesSkinType(Product product, String skinTypeDescription) {
-        // Match product type with skin type description (allowing "normal" type for all skin types)
-        return product.getType().equalsIgnoreCase(skinTypeDescription) ||
-                product.getType().equalsIgnoreCase("normal");
-    }
+//    private boolean matchesSkinType(Product product, String skinTypeDescription) {
+//        // Match product type with skin type description (allowing "normal" type for all skin types)
+//        return product.getType().equalsIgnoreCase(skinTypeDescription) ||
+//                product.getType().equalsIgnoreCase("normal");
+//    }
 
     // Check if product contains any ingredient to avoid
     private boolean containsAnyAvoidIngredient(Product product, List<Ingredient> avoidIngredients) {

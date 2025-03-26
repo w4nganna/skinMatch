@@ -45,9 +45,6 @@ public class Product {
     private Category category;
 
     @NotEmpty
-    private String type;
-
-    @NotEmpty
     private String imageURL;
 
     @Transient  // NOT stored in the database
@@ -111,7 +108,6 @@ public class Product {
         this.brand = brand;
         this.price = price;
         this.category = category;
-        this.type = type;
         this.imageURL = imageURL;
         this.testResults = testResults;
         this.ingredients = ingredients;
