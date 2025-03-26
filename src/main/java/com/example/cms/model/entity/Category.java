@@ -25,6 +25,7 @@ public class Category {
 
     // Many-to-One relationship with Product
     @OneToMany (mappedBy = "category")
+    @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
     public Category(int id, String name)
