@@ -92,17 +92,6 @@ public class Product {
     @ManyToMany(mappedBy = "favourites")
     private Set<User> users = new HashSet<>();
 
-    //Many-to-Many relationship of alternative products
-    @ManyToMany
-    @JoinTable(
-            name = "product_alternatives",
-            joinColumns = @JoinColumn(name = "productId"),
-            inverseJoinColumns = @JoinColumn(name = "altProdId")
-    )
-
-    @JsonIgnore
-    private Set<Product> alternatives;
-
     public Product(long productId, String name, String brand, Double price,
                    Category category, String type, String imageURL, List<TestResults> testResults,
                    List<Ingredient> ingredients, List<Concern> concerns, List<Skintype> skintypes) {

@@ -53,10 +53,8 @@ public class ProductSearchService {
                         product.getPrice(),
                         product.getImageURL(),
                         product.getIngredients(),
-                        product.getAverageScore(),
-                        product.getAlternatives().stream()
-                                .map(Product::getProductId) // Extract alternative product IDs
-                                .collect(Collectors.toList())
+                        product.getAverageScore()
+
                 ))
 
                 //Collect the results into a list
@@ -82,10 +80,7 @@ public class ProductSearchService {
                         product.getPrice(),
                         product.getImageURL(),
                         product.getIngredients(),
-                        product.getAverageScore(),
-                        product.getAlternatives().stream()
-                                .map(Product::getProductId) // Extract alternative product IDs
-                                .collect(Collectors.toList())
+                        product.getAverageScore()
                 ))
                 //Create list
                 .collect(Collectors.toList());

@@ -46,4 +46,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     // ----------------Find unique brands-----------
     @Query(value = "SELECT DISTINCT p.brand FROM products p", nativeQuery = true)
     List<String> findAllBrands();
+
+    @Query(value = "SELECT DISTINCT p.* FROM products p " +
+            "JOIN ProductIngredients pi ON p.productId = pi.productId " +
+            "WHERE p.categoryId = (SELECT categoryId FROM products WHERE productId = :productId) " +
+            "AND pi.ingredientId IN (SELECT ingredientId FROM ProductIngredients WHERE productId = :productId) " +
+            "AND p.productId <> :productId", nativeQuery = true)
+    List<Product> findAlternativeProducts(@Param("productId") Long productId);
+
 }

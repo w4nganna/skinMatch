@@ -74,19 +74,19 @@ INSERT INTO ingredients (ingredientId, ingredientName) VALUES (8, 'Oil Extracts'
 INSERT INTO ingredients (ingredientId, ingredientName) VALUES (9, 'Parfum');
 
 ----------------Product Alternatives-----------------
-INSERT INTO product_alternatives (productID, altProdId) VALUES (1,2), (2,1);
-INSERT INTO product_alternatives (productID, altProdId) VALUES (3,4), (4,3);
-INSERT INTO product_alternatives (productID, altProdId) VALUES (5,6), (6,5);
-INSERT INTO product_alternatives (productId, altProdId) VALUES (7,8), (8,7);
-INSERT INTO product_alternatives (productId, altProdId) VALUES (9,10), (10,9);
-INSERT INTO product_alternatives (productId, altProdId) VALUES (11,12), (12,11);
-INSERT INTO product_alternatives (productId, altProdId) VALUES (13,14), (14,13);
-INSERT INTO product_alternatives (productId, altProdId) VALUES (15,16), (16,15);
-INSERT INTO product_alternatives (productId, altProdId) VALUES (17,18), (18,17);
-INSERT INTO product_alternatives (productId, altProdId) VALUES (19,20), (20,19);
-INSERT INTO product_alternatives (productId, altProdId) VALUES (21,22), (22,21);
-INSERT INTO product_alternatives (productId, altProdId) VALUES (23,24), (24,23);
-INSERT INTO product_alternatives (productId, altProdId)VALUES (25,26), (26,25);
+//INSERT INTO product_alternatives (productID, altProdId) VALUES (1,2), (2,1);
+//INSERT INTO product_alternatives (productID, altProdId) VALUES (3,4), (4,3);
+//INSERT INTO product_alternatives (productID, altProdId) VALUES (5,6), (6,5);
+//INSERT INTO product_alternatives (productId, altProdId) VALUES (7,8), (8,7);
+//INSERT INTO product_alternatives (productId, altProdId) VALUES (9,10), (10,9);
+//INSERT INTO product_alternatives (productId, altProdId) VALUES (11,12), (12,11);
+//INSERT INTO product_alternatives (productId, altProdId) VALUES (13,14), (14,13);
+//INSERT INTO product_alternatives (productId, altProdId) VALUES (15,16), (16,15);
+//INSERT INTO product_alternatives (productId, altProdId) VALUES (17,18), (18,17);
+//INSERT INTO product_alternatives (productId, altProdId) VALUES (19,20), (20,19);
+//INSERT INTO product_alternatives (productId, altProdId) VALUES (21,22), (22,21);
+//INSERT INTO product_alternatives (productId, altProdId) VALUES (23,24), (24,23);
+//INSERT INTO product_alternatives (productId, altProdId)VALUES (25,26), (26,25);
 
 ----------------Product Concerns-----------------
 INSERT INTO ProductConcerns (productId, concernId) VALUES (7,1),(11,1), (12,1), (19,1), (20,1);

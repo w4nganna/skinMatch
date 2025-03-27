@@ -56,10 +56,8 @@ public class ProductController {
                             product.getPrice(),
                             product.getImageURL(),
                             product.getIngredients(),
-                            avgScore, // Use the computed value
-                            product.getAlternatives().stream()
-                                    .map(Product::getProductId)
-                                    .collect(Collectors.toList())
+                            avgScore // Use the computed value
+
                     );
                 })
                 .collect(Collectors.toList());
@@ -84,14 +82,13 @@ public class ProductController {
 
     @GetMapping("/products/{productId}/alt")
     public ResponseEntity<List<ProductDto>> getProductAltById(@PathVariable Long productId) {
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId));
+        List<Product> alternatives = productRepository.findAlternativeProducts(productId);
 
-        // Convert the alternatives to DTOs to avoid recursion issues
-        List<ProductDto> alternatives = product.getAlternatives().stream()
-                .map(ProductDto::fromEntity) // Convert Product to ProductDto
+        List<ProductDto> alternativeDtos = alternatives.stream()
+                .map(ProductDto::fromEntity)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(alternatives);
 
+        return ResponseEntity.ok(alternativeDtos);
     }
 
     //Get all unique brands
@@ -126,6 +123,7 @@ public class ProductController {
             @RequestParam(required = false) List<Integer> concerns) {
         return productSearchService.getFilteredProductsII(maxPrice, sortBy, category, brands, types, avoidIngredients, concerns);
     }
+
 
 
 }
