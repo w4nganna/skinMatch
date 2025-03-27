@@ -18,8 +18,8 @@ public class ProductSearchService {
     //------------Product search method I: Java filter-----------
     //Return list of filtered product DTOs
     public List<ProductDto> getFilteredProductsI(
-            Double maxPrice, String sortBy, List<Integer> categories,
-            List<String> brands, List<Integer> types, List<Long> avoidIngredients, List<Integer> concerns) {
+            Double maxPrice, String sortBy, Integer category,
+            List<String> brands, List<String> types, List<Long> avoidIngredients, List<Integer> concerns) {
 
         //Fetch all products from the database
         List<Product> products = productRepository.findAllProductsSorted(sortBy);
@@ -29,15 +29,15 @@ public class ProductSearchService {
                 .filter(product -> (maxPrice == null || product.getPrice() <= maxPrice))
 
                 //Filter products that have matching category
-                .filter(product -> (categories == null || categories.isEmpty() || categories.contains(product.getCategory().getCategoryId())))
+                //.filter(product -> (category == null || product.getCategory().getCategoryId() == category))
 
                 //Filter products that belong to any of the brands on the list
                 .filter(product -> (brands == null || brands.isEmpty() || brands.contains(product.getBrand())))
 
                 //Filter products that belong to any of the specified types
                 .filter(product -> (types == null || types.isEmpty() || product.getSkintypes().stream()
-                        .anyMatch(type -> types.contains(type.getSkintypeId()))))
-
+                                .map(skinType -> skinType.getDescription().toLowerCase())
+                                .anyMatch(types::contains)))
                 //Filter products that match at least one/any of the concerns
                 .filter(product -> (concerns == null || concerns.isEmpty() || product.getConcerns().stream()
                         .anyMatch(concern -> concerns.contains(concern.getConcernId()))))
@@ -54,10 +54,8 @@ public class ProductSearchService {
                         product.getPrice(),
                         product.getImageURL(),
                         product.getIngredients(),
-                        product.getAverageScore(),
-                        product.getAlternatives().stream()
-                                .map(Product::getProductId) // Extract alternative product IDs
-                                .collect(Collectors.toList())
+                        product.getAverageScore()
+
                 ))
 
                 //Collect the results into a list
@@ -83,10 +81,7 @@ public class ProductSearchService {
                         product.getPrice(),
                         product.getImageURL(),
                         product.getIngredients(),
-                        product.getAverageScore(),
-                        product.getAlternatives().stream()
-                                .map(Product::getProductId) // Extract alternative product IDs
-                                .collect(Collectors.toList())
+                        product.getAverageScore()
                 ))
                 //Create list
                 .collect(Collectors.toList());

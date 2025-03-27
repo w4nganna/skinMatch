@@ -68,17 +68,14 @@ public class UserController {
 
         return user.getFavourites().stream()
                 .map(product -> new ProductDto(
-                        product.getProductId(),
-                        product.getName(),
-                        product.getBrand(),
-                        product.getPrice(),
-                        product.getImageURL(),
-                        product.getIngredients(),
-                        product.getAverageScore(),
-                        product.getAlternatives().stream()
-                                .map(Product::getProductId) // Extract alternative product IDs
-                                .collect(Collectors.toList())
-                ))
+                product.getProductId(),
+                product.getName(),
+                product.getBrand(),
+                product.getPrice(),
+                product.getImageURL(),
+                product.getIngredients(),
+                product.getAverageScore()
+        ))
                 .collect(Collectors.toSet());
     }
 

@@ -84,21 +84,18 @@ public class Product {
     )
     private List<Skintype> skintypes;
 
+    @ManyToMany
+    @JoinTable(
+            name = "product_skintype",
+            joinColumns = @JoinColumn(name = "productId"),
+            inverseJoinColumns = @JoinColumn(name = "skintypeId")
+    )
+    private List<Skintype> skinTypesProduct = new ArrayList<>();
+
     //Many-to-Many relationship with products
     @JsonBackReference
     @ManyToMany(mappedBy = "favourites")
     private Set<User> users = new HashSet<>();
-
-    //Many-to-Many relationship of alternative products
-    @ManyToMany
-    @JoinTable(
-            name = "product_alternatives",
-            joinColumns = @JoinColumn(name = "productId"),
-            inverseJoinColumns = @JoinColumn(name = "altProdId")
-    )
-
-    @JsonIgnore
-    private Set<Product> alternatives;
 
     public Product(long productId, String name, String brand, Double price,
                    Category category, String type, String imageURL, List<TestResults> testResults,

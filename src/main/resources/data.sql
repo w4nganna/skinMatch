@@ -6,7 +6,11 @@
 ----------------User-----------------
 INSERT INTO users(userId, email, password) VALUES('00001', 'jialuo.chen@mail.utoronto.ca', '1111');
 INSERT INTO users(userId, email, password) VALUES('00002', 'lea.kwon@mail.utoronto.ca', '1234');
-INSERT INTO users(userId, email, password) VALUES('00003', 'user.testing@mail.utoronto.ca', '2222');
+INSERT INTO users(userId, email, password) VALUES('00003', 'karuna.adhikari@mail.utoronto.ca', '3333');
+INSERT INTO users(userId, email, password) VALUES('00004', 'pragya.prakash@mail.utoronto.ca', '4444');
+INSERT INTO users(userId, email, password) VALUES('00005', 'anoushka.paul@mail.utoronto.ca', '5555');
+INSERT INTO users(userId, email, password) VALUES('00006', 'anna.wang@mail.utoronto.ca', '6666');
+INSERT INTO users(userId, email, password) VALUES('00007', 'naeer.khan@mail.utoronto.ca', '7777');
 
 ----------------Skintypes-----------------
 INSERT INTO skintypes(skintypeId, description) VALUES (1, 'Oily');
@@ -63,30 +67,15 @@ VALUES
     (26, 'Daily Microfoliant Exfoliator', 'Dermalogica', 59.00, 5, 'https://cdn-tp3.mozu.com/30113-50629/cms/50629/files/9b6a0227-a973-4a31-9164-6881f4b5eae1');
 
 ----------------Ingredients-----------------
-INSERT INTO ingredients (ingredientId, ingredientName) VALUES (1, 'Water');
-INSERT INTO ingredients (ingredientId, ingredientName) VALUES (2, 'Aloe Vera Juice');
-INSERT INTO ingredients (ingredientId, ingredientName) VALUES (3, 'Retinol');
-INSERT INTO ingredients (ingredientId, ingredientName) VALUES (4, 'Vitamin C');
-INSERT INTO ingredients (ingredientId, ingredientName) VALUES (5, 'Hyaluronic Acid');
-INSERT INTO ingredients (ingredientId, ingredientName) VALUES (6, 'SPF50+');
-INSERT INTO ingredients (ingredientId, ingredientName) VALUES (7, 'Glycerin');
-INSERT INTO ingredients (ingredientId, ingredientName) VALUES (8, 'Oil Extracts');
-INSERT INTO ingredients (ingredientId, ingredientName) VALUES (9, 'Parfum');
-
-----------------Product Alternatives-----------------
-INSERT INTO product_alternatives (productID, altProdId) VALUES (1,2), (2,1);
-INSERT INTO product_alternatives (productID, altProdId) VALUES (3,4), (4,3);
-INSERT INTO product_alternatives (productID, altProdId) VALUES (5,6), (6,5);
-INSERT INTO product_alternatives (productId, altProdId) VALUES (7,8), (8,7);
-INSERT INTO product_alternatives (productId, altProdId) VALUES (9,10), (10,9);
-INSERT INTO product_alternatives (productId, altProdId) VALUES (11,12), (12,11);
-INSERT INTO product_alternatives (productId, altProdId) VALUES (13,14), (14,13);
-INSERT INTO product_alternatives (productId, altProdId) VALUES (15,16), (16,15);
-INSERT INTO product_alternatives (productId, altProdId) VALUES (17,18), (18,17);
-INSERT INTO product_alternatives (productId, altProdId) VALUES (19,20), (20,19);
-INSERT INTO product_alternatives (productId, altProdId) VALUES (21,22), (22,21);
-INSERT INTO product_alternatives (productId, altProdId) VALUES (23,24), (24,23);
-INSERT INTO product_alternatives (productId, altProdId)VALUES (25,26), (26,25);
+INSERT INTO ingredients (ingredientId, ingredientName, body) VALUES (1, 'Water', 'As the label says H20'),
+                                                                        (2, 'Aloe Vera', 'Used to topically treat sunburn'),
+                                                                        (3, 'Retinol','increases cell turnover rate' ),
+                                                                        (4, 'Vitamin C', 'boosts collagen production'),
+                                                                        (5, 'Hyaluronic Acid', 'Hydrates the skin'),
+                                                                        (6, 'SPF50+', 'protects from UV rays'),
+                                                                        (7, 'Salicyclic acid', 'clears sebum from skin'),
+                                                                        (8, 'Niacinamide','helps to retain moisture, by boosting the production of ceramides ' ),
+                                                                        (9, 'Parfum', 'scented');
 
 ----------------Product Concerns-----------------
 INSERT INTO ProductConcerns (productId, concernId) VALUES (7,1),(11,1), (12,1), (19,1), (20,1);

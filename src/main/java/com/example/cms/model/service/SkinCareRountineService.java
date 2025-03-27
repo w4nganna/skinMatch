@@ -3,6 +3,7 @@ package com.example.cms.model.service;
 import com.example.cms.controller.Dto.ProductDto;
 import com.example.cms.model.entity.*;
 import com.example.cms.model.repository.ProductRepository;
+import com.example.cms.model.repository.SkintypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,7 @@ public class SkinCareRountineService {
 
         // Filter products based on user's skin type and ingredients to avoid
         List<Product> filteredProducts = allProducts.stream()
-               // .filter(product -> this.matchesSkinType(product, skinTypeDescription))
+                .filter(product -> this.matchesSkinType(product, skinTypeDescription))
                 .filter(product -> !this.containsAnyAvoidIngredient(product, avoidIngredients))
                 .collect(Collectors.toList());
 
@@ -75,11 +76,12 @@ public class SkinCareRountineService {
     }
 
     // Check if product matches the user's skin type
-//    private boolean matchesSkinType(Product product, String skinTypeDescription) {
-//        // Match product type with skin type description (allowing "normal" type for all skin types)
-//        return product.getType().equalsIgnoreCase(skinTypeDescription) ||
-//                product.getType().equalsIgnoreCase("normal");
-//    }
+    private boolean matchesSkinType(Product product, String skinTypeDescription) {
+        // Match product type with skin type description (allowing "normal" type for all skin types)
+        return product.getSkintypes().stream()
+                .map(Skintype::getDescription)
+                .anyMatch(st -> st.equalsIgnoreCase(skinTypeDescription) || st.equalsIgnoreCase("normal"));
+    }
 
     // Check if product contains any ingredient to avoid
     private boolean containsAnyAvoidIngredient(Product product, List<Ingredient> avoidIngredients) {
@@ -175,10 +177,8 @@ public class SkinCareRountineService {
                         product.getPrice(),
                         product.getImageURL(),
                         product.getIngredients(),
-                        product.getAverageScore(),
-                        product.getAlternatives().stream()
-                                .map(Product::getProductId) // Extract alternative product IDs
-                                .collect(Collectors.toList())
+                        product.getAverageScore()
+
                 ))
                 .collect(Collectors.toList());
     }

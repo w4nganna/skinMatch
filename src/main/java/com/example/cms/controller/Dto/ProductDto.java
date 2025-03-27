@@ -19,7 +19,6 @@ public class ProductDto {
     private String imageURL;
     private List<Ingredient> ingredients;
     private Double averageScore;
-    private List<Long> alternativeProductsId;
 
     public static ProductDto fromEntity(Product product) {
         return new ProductDto(
@@ -29,10 +28,7 @@ public class ProductDto {
                 product.getPrice(),
                 product.getImageURL(),
                 product.getIngredients(),
-                product.getAverageScore(),
-                product.getAlternatives().stream()
-                        .map(Product::getProductId)
-                        .collect(Collectors.toList())
+                product.getAverageScore()
         );
     }
 }

@@ -3,6 +3,10 @@ package com.example.cms.controller;
 import com.example.cms.controller.Dto.ProductDto;
 import com.example.cms.controller.exceptions.ProductNotFoundException;
 import com.example.cms.controller.exceptions.UserNotFoundException;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
+
 import com.example.cms.model.entity.User;
 import com.example.cms.model.repository.UserRepository;
 import com.example.cms.model.entity.Product;
@@ -52,10 +56,8 @@ public class ProductController {
                             product.getPrice(),
                             product.getImageURL(),
                             product.getIngredients(),
-                            avgScore, // Use the computed value
-                            product.getAlternatives().stream()
-                                    .map(Product::getProductId)
-                                    .collect(Collectors.toList())
+                            avgScore // Use the computed value
+
                     );
                 })
                 .collect(Collectors.toList());
@@ -80,14 +82,13 @@ public class ProductController {
 
     @GetMapping("/products/{productId}/alt")
     public ResponseEntity<List<ProductDto>> getProductAltById(@PathVariable Long productId) {
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId));
+        List<Product> alternatives = productRepository.findAlternativeProducts(productId);
 
-        // Convert the alternatives to DTOs to avoid recursion issues
-        List<ProductDto> alternatives = product.getAlternatives().stream()
-                .map(ProductDto::fromEntity) // Convert Product to ProductDto
+        List<ProductDto> alternativeDtos = alternatives.stream()
+                .map(ProductDto::fromEntity)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(alternatives);
 
+        return ResponseEntity.ok(alternativeDtos);
     }
 
     //Get all unique brands
@@ -115,7 +116,8 @@ public class ProductController {
             @RequestParam(required = false) Double maxPrice,
             @RequestParam(required = false) String sortBy,
             @RequestParam(required = false) Integer category,
-            @RequestParam(required = false) List<String> brands,
+            @RequestParam(required = false)
+            List<String> brands,
             @RequestParam(required = false) List<String> types,
             @RequestParam(required = false) List<Long> avoidIngredients,
             @RequestParam(required = false) List<Integer> concerns) {
@@ -123,4 +125,6 @@ public class ProductController {
     }
 
 
+
 }
+
