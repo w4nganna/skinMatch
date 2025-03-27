@@ -24,7 +24,7 @@ public class Ingredient{
     @NotEmpty
     private String ingredientName;
 
-    private String description;
+    private String body;
 
     //Many-to-Many relationship with Products
     @ManyToMany(mappedBy = "ingredients")

@@ -35,8 +35,9 @@ public class ProductSearchService {
                 .filter(product -> (brands == null || brands.isEmpty() || brands.contains(product.getBrand())))
 
                 //Filter products that belong to any of the specified types
-                .filter(product -> (types == null || types.isEmpty() || types.contains(product.getType())))
-
+                .filter(product -> (types == null || types.isEmpty() || product.getSkintypes().stream()
+                                .map(skinType -> skinType.getDescription().toLowerCase())
+                                .anyMatch(types::contains)))
                 //Filter products that match at least one/any of the concerns
                 .filter(product -> (concerns == null || concerns.isEmpty() || product.getConcerns().stream()
                         .anyMatch(concern -> concerns.contains(concern.getConcernId()))))

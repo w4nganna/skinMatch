@@ -45,9 +45,6 @@ public class Product {
     private Category category;
 
     @NotEmpty
-    private String type;
-
-    @NotEmpty
     private String imageURL;
 
     @Transient  // NOT stored in the database
@@ -87,6 +84,14 @@ public class Product {
     )
     private List<Skintype> skintypes;
 
+    @ManyToMany
+    @JoinTable(
+            name = "product_skintype",
+            joinColumns = @JoinColumn(name = "productId"),
+            inverseJoinColumns = @JoinColumn(name = "skintypeId")
+    )
+    private List<Skintype> skinTypesProduct = new ArrayList<>();
+
     //Many-to-Many relationship with products
     @JsonBackReference
     @ManyToMany(mappedBy = "favourites")
@@ -100,7 +105,6 @@ public class Product {
         this.brand = brand;
         this.price = price;
         this.category = category;
-        this.type = type;
         this.imageURL = imageURL;
         this.testResults = testResults;
         this.ingredients = ingredients;

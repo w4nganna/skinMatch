@@ -67,7 +67,7 @@ VALUES
     (26, 'Daily Microfoliant Exfoliator', 'Dermalogica', 59.00, 5, 'https://cdn-tp3.mozu.com/30113-50629/cms/50629/files/9b6a0227-a973-4a31-9164-6881f4b5eae1');
 
 ----------------Ingredients-----------------
-INSERT INTO ingredients (ingredientId, ingredientName, description) VALUES (1, 'Water', 'As the label says H20'),
+INSERT INTO ingredients (ingredientId, ingredientName, body) VALUES (1, 'Water', 'As the label says H20'),
                                                                         (2, 'Aloe Vera', 'Used to topically treat sunburn'),
                                                                         (3, 'Retinol','increases cell turnover rate' ),
                                                                         (4, 'Vitamin C', 'boosts collagen production'),
