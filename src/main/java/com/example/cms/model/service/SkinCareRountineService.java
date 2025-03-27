@@ -176,6 +176,7 @@ public class SkinCareRountineService {
                         product.getImageURL(),
                         product.getIngredients(),
                         product.getAverageScore()
+
                 ))
                 .collect(Collectors.toList());
     }

@@ -24,6 +24,8 @@ public class Ingredient{
     @NotEmpty
     private String ingredientName;
 
+    private String description;
+
     //Many-to-Many relationship with Products
     @ManyToMany(mappedBy = "ingredients")
     @JsonIgnore
@@ -33,5 +35,7 @@ public class Ingredient{
     @ManyToMany(mappedBy = "avoidIngredients")
     @JsonIgnore
     private List<TestResults> testResults  = new ArrayList<>();
+
+
 
 }
