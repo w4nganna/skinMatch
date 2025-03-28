@@ -7,6 +7,7 @@ import com.example.cms.model.entity.*;
 import com.example.cms.model.repository.*;
 import com.example.cms.controller.Dto.TestResultsDto;
 import com.example.cms.model.service.SkinCareRountineService;
+import com.example.cms.model.service.SkinCareRoutineService2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,9 @@ public class TestResultsController {
     private final SkintypeRepository skintypeRepository;
     private final IngredientRepository ingredientRepository;
     private final SkinCareRountineService skinCareRountineService;
+
+    private final SkinCareRoutineService2 skinCareRoutineService2;
+
     private final ConcernRepository concernRepository;
 
     @Autowired
@@ -34,6 +38,7 @@ public class TestResultsController {
                                  SkintypeRepository skintypeRepository,
                                  IngredientRepository ingredientRepository,
                                  SkinCareRountineService skinCareRountineService,
+                                 SkinCareRoutineService2 skinCareRoutineService2,
                                  ConcernRepository concernRepository) {
         this.testResultsRepository = testResultsRepository;
         this.userRepository = userRepository;
@@ -41,6 +46,7 @@ public class TestResultsController {
         this.ingredientRepository = ingredientRepository;
         this.skinCareRountineService = skinCareRountineService;
         this.concernRepository = concernRepository;
+        this.skinCareRoutineService2 = skinCareRoutineService2;
     }
 
     //-------------------Get Mapping---------------
@@ -126,12 +132,8 @@ public class TestResultsController {
         // Check if the user already has a TestResults object
         // Delete existing test results if they exist
         if (user.getTestResults() != null) {
-            TestResults oldResults = user.getTestResults();
-            // Break the relationship first
-            user.setTestResults(null);
-            userRepository.save(user);
-            // Now delete the old test results
-            testResultsRepository.delete(oldResults);
+            //Delete test results
+            this.deleteTestResult(user.getUserId());
         }
 
         // Create and set up the new test result
@@ -169,15 +171,17 @@ public class TestResultsController {
         user.setTestResults(testResult);
 
         // First save the user with the relationship to ensure everything is consistent
-        userRepository.save(user);
+        //userRepository.save(user);
 
         // Now match products for the test result
-        this.skinCareRountineService.matchProducts(testResult);
+        //this.skinCareRountineService.matchProducts(testResult);
+        this.skinCareRoutineService2.matchProducts(testResult);
 
-//      // Now save the test result with matched products
+        // Now save the test result with matched products
         TestResults savedResult = testResultsRepository.save(testResult);
-//
-//        userRepository.save(user);
+
+        //Save user
+        userRepository.save(user);
 
         // Convert to DTO for response
         TestResultsResponseDto responseDto = convertToDto(savedResult);
