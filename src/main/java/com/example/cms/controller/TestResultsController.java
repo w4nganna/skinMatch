@@ -166,6 +166,7 @@ public class TestResultsController {
         //-----------Call matching algorithm before saving--------
         // Critical: Establish relationship before saving
         testResult.setUser(user);
+        user.setTestResults(testResult);
 
         // First save the user with the relationship to ensure everything is consistent
         userRepository.save(user);
@@ -173,10 +174,10 @@ public class TestResultsController {
         // Now match products for the test result
         this.skinCareRountineService.matchProducts(testResult);
 
-        // Now save the test result with matched products
+//      // Now save the test result with matched products
         TestResults savedResult = testResultsRepository.save(testResult);
-
-        userRepository.save(user);
+//
+//        userRepository.save(user);
 
         // Convert to DTO for response
         TestResultsResponseDto responseDto = convertToDto(savedResult);
