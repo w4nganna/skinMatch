@@ -105,16 +105,15 @@ public class TestResultsController {
         }
         return userTestResults.getAvoidIngredients();
     }
-
     //-------------------Post Mapping---------------
     @PostMapping("")
     @Transactional
     public ResponseEntity<TestResultsResponseDto> createTestResult(@RequestBody TestResultsDto testResultsDTO) {
         /* Example body:
         {
-            "skinType" : 1,
+            "skinTypes" : 1,
             "avoidIngredients": [1,2],
-            "concerns": [1, 2]
+            "concerns": [1, 2],
             "budget" : 20,
             "user" : "00001"
         }
