@@ -1,23 +1,22 @@
 package com.example.cms;
 
-import com.example.cms.model.entity.User;
-import com.example.cms.model.repository.UserRepository;
+import com.example.cms.controller.Dto.ProductDto;
+import com.example.cms.model.entity.Category;
+import com.example.cms.model.entity.Product;
+import com.example.cms.model.repository.ProductRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -31,41 +30,36 @@ class ProductTests {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private UserRepository userRepository;
+    private ProductRepository productRepository;
 
     @Test
-    void addUser() throws Exception {
-        ObjectNode userJson = objectMapper.createObjectNode();
-        userJson.put("userId", "00003");
-        userJson.put("email", "test.user@mail.com");
-        userJson.put("password", "test1234");
+    void getProductById() throws Exception {
+        // First, we prepare a valid product ID to test with
+        Long productId = 1L;  // Replace this with a product ID that exists in the database
 
-        MockHttpServletResponse response = mockMvc.perform(
-                        post("/users").
-                                contentType("application/json").
-                                content(userJson.toString()))
-                .andReturn().getResponse();
+        // Perform a GET request for the product by its ID
+        MvcResult result = mockMvc.perform(get("/products/{productId}", productId))
+                .andReturn();
 
-        assertEquals(200, response.getStatus());
-        assertTrue(userRepository.findById("00003").isPresent());
-        User addedUser = userRepository.findById("00003").get();
+        // Get the response as a JSON string
+        String responseJson = result.getResponse().getContentAsString();
 
-        assertEquals("00003", addedUser.getUserId());
-        assertEquals("test.user@mail.com", addedUser.getEmail());
-    }
+        // Use ObjectMapper to convert the JSON string into a ProductDto
+        ProductDto productDto = objectMapper.readValue(responseJson, ProductDto.class);
 
-    @Test
-    void deleteUser() throws Exception {
-        User user = new User("00004", "delete.me@mail.com", "delete123");
-        userRepository.save(user);
+        // Assert the HTTP status code of the response is 200 OK
+        assertEquals(200, result.getResponse().getStatus());
 
-        MockHttpServletResponse response = mockMvc.perform(
-                        delete("/users/00004").
-                                contentType("application/json"))
-                .andReturn().getResponse();
+        // Retrieve the product from the repository to verify it's been saved correctly
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new Exception("Product not found"));
 
-        assertEquals(200, response.getStatus());
-        assertTrue(userRepository.findById("00004").isEmpty());
+        // Assert that the retrieved product matches the expected product details
+        assertEquals("ultra fluid", productDto.getName());
+        assertEquals("La Roche-Posay", productDto.getBrand());
+        assertEquals(30.50, productDto.getPrice(), 0.01); // Using a tolerance for price comparison
+        assertEquals("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s", productDto.getImageURL());
+        //assertEquals(1, productDto.getCategoryId());  // Check the category ID
     }
 }
 
