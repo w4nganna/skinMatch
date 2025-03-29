@@ -56,7 +56,7 @@ public class ProductController {
                             product.getPrice(),
                             product.getImageURL(),
                             product.getIngredients(),
-                            avgScore // Use the computed value
+                            product.getAverageScore()
 
                     );
                 })
@@ -72,8 +72,6 @@ public class ProductController {
 
         // Fetch the average score from ReviewRepository
         Double avgScore = reviewRepository.findAverageScoreByProductId(productId);
-
-        // Set the computed score before returning
         product.setAverageScore(avgScore);
 
         return ResponseEntity.ok(ProductDto.fromEntity(product));
@@ -83,9 +81,11 @@ public class ProductController {
     @GetMapping("/products/{productId}/alt")
     public ResponseEntity<List<ProductDto>> getProductAltById(@PathVariable Long productId) {
         List<Product> alternatives = productRepository.findAlternativeProducts(productId);
-
         List<ProductDto> alternativeDtos = alternatives.stream()
-                .map(ProductDto::fromEntity)
+                .map(product -> {
+                    product.setAverageScore(reviewRepository.findAverageScoreByProductId(product.getProductId()));
+                    return ProductDto.fromEntity(product);
+                })
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(alternativeDtos);
@@ -107,6 +107,7 @@ public class ProductController {
             @RequestParam(required = false) List<Integer> types,
             @RequestParam(required = false) List<Long> avoidIngredients,
             @RequestParam(required = false) List<Integer> concerns) {
+
         return productSearchService.getFilteredProductsI(maxPrice, sortBy, categories, brands, types, avoidIngredients, concerns);
     }
 

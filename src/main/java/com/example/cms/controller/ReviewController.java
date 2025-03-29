@@ -67,7 +67,13 @@ public class ReviewController {
        review.setReviewBody(reviewDto.getReviewBody());
        review.setScore(reviewDto.getScore());
        review.setDate(reviewDto.getDate());
-       return reviewRepository.save(review);
+       Review savedReview = reviewRepository.save(review);
+
+       Double avgScore = reviewRepository.findAverageScoreByProductId(product.getProductId());
+       product.setAverageScore(avgScore);
+       productRepository.save(product);
+
+       return savedReview;
     }
 
     //update review
@@ -104,6 +110,11 @@ public class ReviewController {
 
                     return reviewRepository.save(review);
                 });
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+        Double avgScore = reviewRepository.findAverageScoreByProductId(productId);
+        product.setAverageScore(avgScore);
+        productRepository.save(product);
 
         return ResponseEntity.ok(updatedReview);
     }
@@ -111,5 +122,11 @@ public class ReviewController {
     @DeleteMapping("/reviews/{productId}/{userId}")
     void deleteReview(@PathVariable ("productId") Long productId, @PathVariable("userId") String userId){
         reviewRepository.deleteById(new ReviewKey(userId, productId));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+        Double avgScore = reviewRepository.findAverageScoreByProductId(productId);
+        product.setAverageScore(avgScore);
+        productRepository.save(product);
     }
+
 }

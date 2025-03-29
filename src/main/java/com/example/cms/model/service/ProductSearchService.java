@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class ProductSearchService {
 
     private final ProductRepository productRepository;
+    private final ProductRepository reviewRepository;
 
     //------------Product search method I: Java filter-----------
     //Return list of filtered product DTOs
@@ -25,6 +26,7 @@ public class ProductSearchService {
         List<Product> products = productRepository.findAllProductsSorted(sortBy);
 
         return products.stream()
+
                  //Filter products that are <= maximum price
                 .filter(product -> (maxPrice == null || product.getPrice() <= maxPrice))
 
@@ -47,16 +49,19 @@ public class ProductSearchService {
                         .noneMatch(ingredient -> avoidIngredients.contains(ingredient.getIngredientId()))))
 
                 //Convert each Product entity to a ProductDto before returning the response
-                .map(product -> new ProductDto(
-                        product.getProductId(),
-                        product.getName(),
-                        product.getBrand(),
-                        product.getPrice(),
-                        product.getImageURL(),
-                        product.getIngredients(),
-                        product.getAverageScore()
+                .map(product -> {
+                    product.setAverageScore(productRepository.findAverageScoreByProductId(product.getProductId()));
 
-                ))
+                    return new ProductDto(
+                            product.getProductId(),
+                            product.getName(),
+                            product.getBrand(),
+                            product.getPrice(),
+                            product.getImageURL(),
+                            product.getIngredients(),
+                            product.getAverageScore()
+                    );
+                })
 
                 //Collect the results into a list
                 .collect(Collectors.toList());
@@ -74,17 +79,19 @@ public class ProductSearchService {
 
         //Convert each Product entity to a ProductDto
         return products.stream()
-                .map(product -> new ProductDto(
-                        product.getProductId(),
-                        product.getName(),
-                        product.getBrand(),
-                        product.getPrice(),
-                        product.getImageURL(),
-                        product.getIngredients(),
-                        product.getAverageScore()
-                ))
+                .map(product -> {
+                    product.setAverageScore(productRepository.findAverageScoreByProductId(product.getProductId()));
+                    return new ProductDto(
+                            product.getProductId(),
+                            product.getName(),
+                            product.getBrand(),
+                            product.getPrice(),
+                            product.getImageURL(),
+                            product.getIngredients(),
+                            product.getAverageScore()
+                    );
+                })
                 //Create list
                 .collect(Collectors.toList());
     }
-
 }

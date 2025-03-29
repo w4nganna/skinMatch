@@ -3,8 +3,10 @@ package com.example.cms.model.service;
 import com.example.cms.controller.Dto.ProductDto;
 import com.example.cms.model.entity.*;
 import com.example.cms.model.repository.ProductRepository;
+import com.example.cms.model.repository.ReviewRepository;
 import com.example.cms.model.repository.SkintypeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -16,6 +18,8 @@ public class SkinCareRountineService {
 
     // repo
     private final ProductRepository productRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     /*
     *
@@ -170,16 +174,11 @@ public class SkinCareRountineService {
     // Convert the entity list to DTO list for controller use
     public List<ProductDto> getProductDtos(List<Product> products) {
         return products.stream()
-                .map(product -> new ProductDto(
-                        product.getProductId(),
-                        product.getName(),
-                        product.getBrand(),
-                        product.getPrice(),
-                        product.getImageURL(),
-                        product.getIngredients(),
-                        product.getAverageScore()
-
-                ))
+                .map(product -> {
+                    Double avgScore = reviewRepository.findAverageScoreByProductId(product.getProductId());
+                    product.setAverageScore(avgScore);
+                    return ProductDto.fromEntity(product);
+                })
                 .collect(Collectors.toList());
     }
 

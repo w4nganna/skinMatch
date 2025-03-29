@@ -7,6 +7,7 @@ import com.example.cms.model.entity.Category;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.List;
@@ -47,8 +48,10 @@ public class Product {
     @NotEmpty
     private String imageURL;
 
-    @Transient  // NOT stored in the database
+    @Transient
     private Double averageScore;
+
+    private String description;
 
     // Add @JsonIgnore to break the circular reference
     // Many-to-Many relationship with TestResults
@@ -110,6 +113,7 @@ public class Product {
         this.ingredients = ingredients;
         this.concerns = concerns;
         this.skintypes = skintypes;
+        this.averageScore = getAverageScore();
 
     }
 

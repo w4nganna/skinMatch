@@ -8,6 +8,7 @@ import com.example.cms.model.entity.Product;
 import com.example.cms.model.entity.TestResults;
 import com.example.cms.model.entity.User;
 import com.example.cms.model.repository.ProductRepository;
+import com.example.cms.model.repository.ReviewRepository;
 import com.example.cms.model.repository.TestResultsRepository;
 import com.example.cms.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,15 @@ public class UserController {
     private final UserRepository userRepository;
     private final TestResultsRepository testResultsRepository;
     private final ProductRepository productRepository;
+    private final ReviewRepository reviewRepository;
+
 
     @Autowired
-    public UserController(TestResultsRepository testResultsRepository, UserRepository userRepository, ProductRepository productRepository) {
+    public UserController(TestResultsRepository testResultsRepository, UserRepository userRepository, ProductRepository productRepository, ReviewRepository reviewRepository) {
         this.testResultsRepository = testResultsRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
+        this.reviewRepository = reviewRepository;
     }
     //-------------------Get------------------
     @GetMapping("/users")
@@ -60,22 +64,28 @@ public class UserController {
         return ResponseEntity.ok(!userRepository.emailExists(email));
     }
 
-    //Get favourite products
     @GetMapping("/users/{userId}/favs")
     public Set<ProductDto> getFavProds(@PathVariable String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
 
         return user.getFavourites().stream()
-                .map(product -> new ProductDto(
-                product.getProductId(),
-                product.getName(),
-                product.getBrand(),
-                product.getPrice(),
-                product.getImageURL(),
-                product.getIngredients(),
-                product.getAverageScore()
-        ))
+                .map(product -> {
+                    // 🔄 Calculate and set the average score
+                    Double avgScore = reviewRepository.findAverageScoreByProductId(product.getProductId());
+                    product.setAverageScore(avgScore);
+
+
+                    return new ProductDto(
+                            product.getProductId(),
+                            product.getName(),
+                            product.getBrand(),
+                            product.getPrice(),
+                            product.getImageURL(),
+                            product.getIngredients(),
+                            product.getAverageScore()
+                    );
+                })
                 .collect(Collectors.toSet());
     }
 
