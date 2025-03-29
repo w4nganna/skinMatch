@@ -17,10 +17,10 @@ public class SkinCareRoutineService2 {
     private static final List<String> CATEGORIES = Arrays.asList("Sunscreen", "Cleanser", "Toner", "Moisturizer", "Exfoliator");
 
     public void matchProducts(TestResults testResult) {
-        List<Product> filteredProducts = filterProducts(testResult);
-        Map<String, List<Product>> productsByCategory = groupByCategory(filteredProducts);
-        List<Product> selectedProducts = selectBestProducts(productsByCategory, testResult.getConcerns());
-        adjustSelectionForBudget(selectedProducts, productsByCategory, testResult.getBudget(), testResult.getConcerns());
+        List<Product> filteredProducts = this.filterProducts(testResult);
+        Map<String, List<Product>> productsByCategory = this.groupByCategory(filteredProducts);
+        List<Product> selectedProducts = this.selectBestProducts(productsByCategory, testResult.getConcerns());
+        this.adjustSelectionForBudget(selectedProducts, productsByCategory, testResult.getBudget(), testResult.getConcerns());
         testResult.setRecommendedProducts(selectedProducts);
     }
 
@@ -94,8 +94,20 @@ public class SkinCareRoutineService2 {
     }
 
     private boolean doesNotContainAvoidIngredients(Product product, List<Ingredient> avoidIngredients) {
-        return avoidIngredients == null || avoidIngredients.isEmpty() ||
-                product.getIngredients().stream().noneMatch(i -> avoidIngredients.contains(i.getIngredientId()));
+        if (avoidIngredients == null || avoidIngredients.isEmpty()) {
+            return true;
+        }
+
+        // Extract the IDs of ingredients to avoid
+        Set<Long> avoidIngredientIds = avoidIngredients.stream()
+                .map(Ingredient::getIngredientId)
+                .collect(Collectors.toSet());
+
+        // Check if the product contains any of these ingredients
+        return product.getIngredients().stream()
+                .noneMatch(ingredient -> avoidIngredientIds.contains(ingredient.getIngredientId()));
+//        return avoidIngredients == null || avoidIngredients.isEmpty() ||
+//                product.getIngredients().stream().noneMatch(i -> avoidIngredients.contains(i.getIngredientId()));
     }
 
     private int countMatchingConcerns(Product product, List<Concern> userConcerns) {

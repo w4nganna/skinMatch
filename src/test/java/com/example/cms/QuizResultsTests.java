@@ -1,10 +1,12 @@
 package com.example.cms;
 
+import com.example.cms.controller.Dto.ProductDto;
 import com.example.cms.controller.Dto.TestResultsDto;
 import com.example.cms.controller.Dto.TestResultsResponseDto;
 import com.example.cms.model.entity.*;
 import com.example.cms.model.repository.*;
 import com.example.cms.model.service.SkinCareRountineService;
+import com.example.cms.model.service.SkinCareRoutineService2;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -54,41 +56,16 @@ class QuizResultsTests {
     private ConcernRepository concernRepository;
 
     @Autowired
-    private SkinCareRountineService skinCareRountineService;
+    private ProductRepository productRepository;
+
+    @Autowired
+//    private SkinCareRountineService skinCareRountineService;
+    private SkinCareRoutineService2 skinCareRoutineService2;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     private List<String> createdUserIds = new ArrayList<>();
-
-//    @AfterEach
-//    @Transactional
-//    void cleanUp() {
-//        for (String userId : createdUserIds) {
-//            // Check if the test user exists
-//            Optional<User> userOpt = userRepository.findById(userId);
-//            if (userOpt.isPresent()) {
-//                User user = userOpt.get();
-//
-//                // Remove relationship to testResults first
-//                if (user.getTestResults() != null) {
-//                    TestResults result = user.getTestResults();
-//                    user.setTestResults(null);
-//                    userRepository.save(user);
-//                    testResultsRepository.delete(result);
-//                }
-//
-//                // Now delete the user
-//                userRepository.delete(user);
-//            }
-//        }
-//
-//        // Clear the list after cleanup
-//        createdUserIds.clear();
-//
-//        // Ensure changes are committed
-//        entityManager.flush();
-//    }
 
     /**
      * Creates a test user and prepares test data for it
@@ -239,25 +216,109 @@ class QuizResultsTests {
 
     @Test
     @Transactional
-    void testGetRecommendedProducts() throws Exception {
-        // Create a unique user and test data
-        String userId = "user-recommend-test";
-        TestResultsDto testResultsDto = createTestUserAndData(userId, 75.0f);
+    void testGetRecommendedProductsComprehensive() throws Exception {
+        // 1. First check what products exist in the database
+        List<Product> allProducts = this.productRepository.findAll();
+        System.out.println("Total products in database: " + allProducts.size());
 
-        // First create a test result
-        mockMvc.perform(
+        // Products by category for debugging
+        Map<String, Long> productsByCategory = allProducts.stream()
+                .collect(Collectors.groupingBy(
+                        p -> p.getCategory().getCategoryName(),
+                        Collectors.counting()));
+
+        System.out.println("Products by category:");
+        productsByCategory.forEach((category, count) -> {
+            System.out.println("  " + category + ": " + count);
+        });
+
+        // 2. Create a unique user with minimal constraints to maximize recommendations
+        String userId = "user-recommend-detailed-test";
+        TestResultsDto testResultsDto = createTestUserAndData(userId, 500.0f); // High budget
+
+        // Print test data for debugging
+        System.out.println("Test Data:");
+        System.out.println("  User ID: " + userId);
+        System.out.println("  Skin Type: " + testResultsDto.getSkinType());
+        System.out.println("  Budget: " + testResultsDto.getBudget());
+        System.out.println("  Avoid Ingredients: " + testResultsDto.getAvoidIngredients());
+        System.out.println("  Concerns: " + testResultsDto.getConcerns());
+
+        // 3. Create test result
+        MockHttpServletResponse createResponse = mockMvc.perform(
                         MockMvcRequestBuilders.post("/test-results")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(testResultsDto))
                 )
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
 
-        // Get recommended products
-        mockMvc.perform(
+        // 4. Parse response to see what was created
+        TestResultsResponseDto createdResults = objectMapper.readValue(
+                createResponse.getContentAsString(),
+                TestResultsResponseDto.class
+        );
+
+        System.out.println("Created Test Results:");
+        System.out.println("  ID: " + createdResults.getTestResultId());
+        System.out.println("  Skin Type: " + createdResults.getSkinTypeName());
+        System.out.println("  Initial Recommendations: " +
+                (createdResults.getRecommendedProducts() != null ?
+                        createdResults.getRecommendedProducts().size() : "null"));
+
+        // 5. Verify in the database
+        User user = userRepository.findById(userId).orElseThrow();
+        TestResults testResults = user.getTestResults();
+
+        System.out.println("Database Check:");
+        System.out.println("  Test Results ID: " + testResults.getTestResultId());
+        System.out.println("  Recommended Products Count: " +
+                (testResults.getRecommendedProducts() != null ?
+                        testResults.getRecommendedProducts().size() : "null"));
+
+        if (testResults.getRecommendedProducts() != null && !testResults.getRecommendedProducts().isEmpty()) {
+            System.out.println("  Product details:");
+            for (Product product : testResults.getRecommendedProducts()) {
+                System.out.println("    - " + product.getName() + " (" + product.getBrand() + ") - $" + product.getPrice());
+                System.out.println("      Category: " + product.getCategory().getCategoryName());
+            }
+        } else {
+            System.out.println("  No products found in database!");
+        }
+
+        // 6. Get recommended products through the API
+        MockHttpServletResponse getResponse = mockMvc.perform(
                         MockMvcRequestBuilders.get("/test-results/users/" + userId + "/recommendations")
                 )
-                .andExpect(status().isOk());
-        // We only check the status since recommendations depend on your matching algorithm
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        // 7. Parse API response
+        List<ProductDto> apiRecommendations = objectMapper.readValue(
+                getResponse.getContentAsString(),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, ProductDto.class)
+        );
+
+        System.out.println("API Response:");
+        System.out.println("  Recommended Products Count: " + apiRecommendations.size());
+
+        if (!apiRecommendations.isEmpty()) {
+            System.out.println("  Product details:");
+            for (ProductDto product : apiRecommendations) {
+                System.out.println("    - " + product.getName() + " (" + product.getBrand() + ") - $" + product.getPrice());
+            }
+        } else {
+            System.out.println("  No products returned from API!");
+        }
+
+        // 8. Assertions
+        assertNotNull(testResults.getRecommendedProducts(), "Test results should have recommended products");
+        assertFalse(testResults.getRecommendedProducts().isEmpty(),
+                "Recommended products in the database should not be empty");
+        assertFalse(apiRecommendations.isEmpty(),
+                "API should return non-empty list of recommended products");
     }
 
     @Test
