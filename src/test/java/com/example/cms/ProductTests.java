@@ -14,6 +14,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -31,6 +34,31 @@ class ProductTests {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Test
+    void testProductFiltering() throws Exception {
+        double maxPrice = 50.00; // Maximum price or budget limit
+        List<String> brands = Arrays.asList("CeraVe", "YESSTYLE");
+
+        // Perform the GET request with specified query parameters
+        MvcResult result = mockMvc.perform(get("/products/filterI")
+                        .param("maxPrice", String.valueOf(maxPrice))
+                        .param("brands", String.join(",", brands)) // Send brands as a comma-separated string
+                        .param("sortBy", "price_asc"))
+                .andReturn();
+
+        // Assert the HTTP status code of the response is 200 OK
+        assertEquals(200, result.getResponse().getStatus());
+
+        // Deserialize the JSON response into an array of ProductDto
+        ProductDto[] filteredProducts = objectMapper.readValue(result.getResponse().getContentAsString(), ProductDto[].class);
+
+        // Assert conditions for each product in the filtered result
+        for (ProductDto product : filteredProducts) {
+            assertTrue(product.getPrice() <= maxPrice, "Product price should not exceed max price");
+            assertTrue(brands.contains(product.getBrand()), "Product brand should be one of the specified brands");
+        }
+    }
 
     @Test
     void getProductById() throws Exception {
@@ -61,5 +89,7 @@ class ProductTests {
         assertEquals("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF_fMJvHqqHsq-E9ehEZCZtF82DAsztreSLw&s", productDto.getImageURL());
         //assertEquals(1, productDto.getCategoryId());  // Check the category ID
     }
+
+
 }
 
