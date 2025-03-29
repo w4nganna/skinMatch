@@ -15,5 +15,6 @@ public class TestResultsResponseDto {
     private List<ProductDto> recommendedProducts;
     private List<String> avoidIngredientsNames;
     private List<String> concernNames;
+    private List<String> categoryNames;
 
 }

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -85,7 +86,7 @@ public class TestResultsController {
         }
 
         // Convert Product entities to DTOs using the service method
-        return skinCareRountineService.getProductDtos(userTestResults.getRecommendedProducts());
+        return skinCareRoutineService2.getProductDtos(userTestResults.getRecommendedProducts());
     }
 
     //Skincare concerns by userId
@@ -199,7 +200,7 @@ public class TestResultsController {
         }
 
         // Convert recommended products to DTOs
-        List<ProductDto> productDtos = skinCareRountineService.getProductDtos(entity.getRecommendedProducts());
+        List<ProductDto> productDtos = skinCareRoutineService2.getProductDtos(entity.getRecommendedProducts());
         dto.setRecommendedProducts(productDtos);
 
         // Convert avoid ingredients to names
@@ -213,6 +214,12 @@ public class TestResultsController {
                 .map(Concern::getDescription)
                 .collect(Collectors.toList());
         dto.setConcernNames(concernNames);
+
+        List<String> categoryNames = new ArrayList<>();
+        for (Product product : entity.getRecommendedProducts()) {
+            categoryNames.add(product.getCategory().getCategoryName());
+        }
+        dto.setCategoryNames(categoryNames);
 
         return dto;
     }

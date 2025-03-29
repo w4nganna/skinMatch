@@ -39,9 +39,16 @@ public class SkinCareRoutineService2 {
     private List<Product> selectBestProducts(Map<String, List<Product>> productsByCategory, List<Concern> userConcerns) {
         List<Product> selected = new ArrayList<>();
         for (String category : CATEGORIES) {
-            productsByCategory.getOrDefault(category, Collections.emptyList()).stream()
-                    .max(Comparator.comparingInt(p -> countMatchingConcerns(p, userConcerns)))
-                    .ifPresent(selected::add);
+            List<Product> productsInCategory = productsByCategory.getOrDefault(category, Collections.emptyList());
+            if (!productsInCategory.isEmpty()) {
+                // Sort products by concern match count (descending) and then by price (ascending)
+                productsInCategory.sort(
+                        Comparator.comparing((Product p) -> countMatchingConcerns(p, userConcerns)).reversed()
+                                .thenComparing(Product::getPrice)
+                );
+                // Add the best matching product for this category
+                selected.add(productsInCategory.get(0));
+            }
         }
         return selected;
     }
