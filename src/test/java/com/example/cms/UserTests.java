@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -40,9 +39,9 @@ class UserTests {
         userJson.put("password", "test1234");
 
         MockHttpServletResponse response = mockMvc.perform(
-                        post("/users").
-                                contentType("application/json").
-                                content(userJson.toString()))
+                        post("/users")
+                                .contentType("application/json")
+                                .content(userJson.toString()))
                 .andReturn().getResponse();
 
         assertEquals(200, response.getStatus());
@@ -55,16 +54,43 @@ class UserTests {
 
     @Test
     void deleteUser() throws Exception {
-        User user = new User("00004", "delete.me@mail.com", "delete123");
+        // Create a user
+        User user = new User("00002", "delete.me@mail.com", "delete123");
         userRepository.save(user);
 
+        // First, delete related records in REVIEWS to avoid constraint violation
+        mockMvc.perform(delete("/users/00002/reviews"))
+                .andReturn().getResponse();
+
+        // Now delete the user
         MockHttpServletResponse response = mockMvc.perform(
-                        delete("/users/00004").
-                                contentType("application/json"))
+                        delete("/users/00002")
+                                .contentType("application/json"))
                 .andReturn().getResponse();
 
         assertEquals(200, response.getStatus());
-        assertTrue(userRepository.findById("00004").isEmpty());
+        assertTrue(userRepository.findById("00002").isEmpty());
+    }
+
+    @Test
+    void updateUserEmail() throws Exception {
+        // Create a user to update
+        User user = new User("00005", "old.email@mail.com", "password123");
+        userRepository.save(user);
+
+        ObjectNode updateJson = objectMapper.createObjectNode();
+        updateJson.put("email", "new.email@mail.com");
+
+        MockHttpServletResponse response = mockMvc.perform(
+                        put("/users/00005/email")
+                                .contentType("application/json")
+                                .content(updateJson.toString()))
+                .andReturn().getResponse();
+
+        assertEquals(200, response.getStatus());
+        assertTrue(userRepository.findById("00005").isPresent());
+        User updatedUser = userRepository.findById("00005").get();
+
+        assertEquals("new.email@mail.com", updatedUser.getEmail());
     }
 }
-
