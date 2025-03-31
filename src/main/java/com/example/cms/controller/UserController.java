@@ -141,6 +141,8 @@ public class UserController {
             return ResponseEntity.badRequest().body("New userId already exists.");
         }
 
+
+
         // Create new user with old user information
         return userRepository.findById(oldUserId).map(oldUser -> {
             // Get the test results linked to the old user
