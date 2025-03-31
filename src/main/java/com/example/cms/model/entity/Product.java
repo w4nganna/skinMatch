@@ -95,15 +95,6 @@ public class Product {
     )
     private List<Skintype> skinTypesProduct = new ArrayList<>();
 
-    //Many-to-Many relationship of alternative products
-    @ManyToMany
-    @JoinTable(
-            name = "product_alternatives",
-            joinColumns = @JoinColumn(name = "productId"),
-            inverseJoinColumns = @JoinColumn(name = "altProdId")
-    )
-    private Set<Product> alternatives;
-
     //Many-to-Many relationship with products
     @JsonBackReference
     @ManyToMany(mappedBy = "favourites")
