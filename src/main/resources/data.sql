@@ -11,6 +11,7 @@ INSERT INTO users(userId, email, password) VALUES('00004', 'pragya.prakash@mail.
 INSERT INTO users(userId, email, password) VALUES('00005', 'anoushka.paul@mail.utoronto.ca', '5555');
 INSERT INTO users(userId, email, password) VALUES('00006', 'anna.wang@mail.utoronto.ca', '6666');
 INSERT INTO users(userId, email, password) VALUES('00007', 'naeer.khan@mail.utoronto.ca', '7777');
+INSERT INTO users(userId, email, password) VALUES('00008', 'aditi.ponemone@mail.utoronto.ca', '8888');
 
 ----------------Skintypes-----------------
 INSERT INTO skintypes(skintypeId, description) VALUES (1, 'Oily');
