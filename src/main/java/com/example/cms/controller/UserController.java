@@ -4,9 +4,7 @@ import com.example.cms.controller.Dto.ProductDto;
 import com.example.cms.controller.Dto.UserDto;
 import com.example.cms.controller.exceptions.ProductNotFoundException;
 import com.example.cms.controller.exceptions.UserNotFoundException;
-import com.example.cms.model.entity.Product;
-import com.example.cms.model.entity.TestResults;
-import com.example.cms.model.entity.User;
+import com.example.cms.model.entity.*;
 import com.example.cms.model.repository.ProductRepository;
 import com.example.cms.model.repository.ReviewRepository;
 import com.example.cms.model.repository.TestResultsRepository;
@@ -66,7 +64,7 @@ public class UserController {
 
     @GetMapping("/users/{userId}/favs")
     public Set<ProductDto> getFavProds(@PathVariable String userId) {
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByIdWithFavourites(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
 
         return user.getFavourites().stream()
@@ -122,7 +120,6 @@ public class UserController {
                 })
                 .orElseGet(() -> ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
-                        //Return 404 with message
                         .body("User with ID " + userId + " not found."));
     }
 
@@ -130,50 +127,74 @@ public class UserController {
     @PutMapping("/users/{userId}/id")
     @Transactional
     public ResponseEntity<String> updateUserId(@PathVariable("userId") String oldUserId, @RequestBody Map<String, String> requestBody) {
-        // Get new userId from request body
         String newUserId = requestBody.get("newUserId");
         if (newUserId == null || newUserId.isEmpty()) {
             return ResponseEntity.badRequest().body("New userId is required.");
         }
 
-        // Check if the new user ID already exists in the repository
         if (userRepository.existsById(newUserId)) {
             return ResponseEntity.badRequest().body("New userId already exists.");
         }
 
 
 
-        // Create new user with old user information
         return userRepository.findById(oldUserId).map(oldUser -> {
-            // Get the test results linked to the old user
-            TestResults testResults = oldUser.getTestResults();
-
-            // Create a new user with the same details
+            // Clone old user into new user
             User newUser = new User(newUserId, oldUser.getEmail(), oldUser.getPassword());
 
-            // Save the new user first
-            userRepository.save(newUser);
+            // Save new user before linking test results
+            userRepository.saveAndFlush(newUser);
 
-            // If test results exist, update their user reference
+            // Step 2: Reassign TestResults
+            TestResults testResults = oldUser.getTestResults();
             if (testResults != null) {
-                // Set the test results to reference the new user and vice versa
+                // Unlink from old user
+                oldUser.setTestResults(null);
+                userRepository.saveAndFlush(oldUser);
+
+                // Re-link to new user
                 testResults.setUser(newUser);
                 newUser.setTestResults(testResults);
-
-                // Set old user repository as null
-                oldUser.setTestResults(null);
-
-                // Save the updated test results and user
-                testResultsRepository.save(testResults);
-                userRepository.save(newUser);
+                testResultsRepository.saveAndFlush(testResults);
             }
 
-            // Delete the old user after saving the new user and updating the test results
+            // Migrate reviews
+            List<Review> oldReviews = reviewRepository.findByUser_UserId(oldUserId);
+            for (Review review : oldReviews) {
+                ReviewKey newKey = new ReviewKey(newUserId, review.getProduct().getProductId());
+
+                Review newReview = new Review();
+                newReview.setReviewId(newKey);
+                newReview.setUser(newUser);
+                newReview.setProduct(review.getProduct());
+                newReview.setDate(review.getDate());
+                newReview.setScore(review.getScore());
+                newReview.setReviewBody(review.getReviewBody());
+
+                reviewRepository.save(newReview);
+                reviewRepository.delete(review);
+            }
+
+            //Migrate Favs
+            Set<Product> oldFavourites = Set.copyOf(oldUser.getFavourites());
+
+            for (Product product : oldFavourites) {
+                product.getUsers().remove(oldUser);
+                product.getUsers().add(newUser);
+                productRepository.save(product);
+            }
+            newUser.setFavourites(oldFavourites);
+
+            userRepository.saveAndFlush(newUser);
+
+            // Step 6: Delete old user
             userRepository.delete(oldUser);
 
             return ResponseEntity.ok("UserId updated successfully.");
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+
 
     //Add or delete favourite product
     @PutMapping("/users/{userId}/favs/{productId}")
