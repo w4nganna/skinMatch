@@ -136,8 +136,6 @@ public class UserController {
             return ResponseEntity.badRequest().body("New userId already exists.");
         }
 
-
-
         return userRepository.findById(oldUserId).map(oldUser -> {
             // Clone old user into new user
             User newUser = new User(newUserId, oldUser.getEmail(), oldUser.getPassword());
@@ -250,6 +248,7 @@ public class UserController {
     }
 
     //-------------------Delete------------------
+    @Transactional
     @DeleteMapping("/users/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") String userId) {
         if (!userRepository.existsById(userId)) {
@@ -257,6 +256,7 @@ public class UserController {
                     .body("User with ID " + userId + " not found.");
         }
 
+        reviewRepository.deleteByUser_UserId(userId);
         userRepository.deleteById(userId);
         return ResponseEntity.ok("User with ID " + userId + " deleted successfully.");
     }

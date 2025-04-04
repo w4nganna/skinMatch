@@ -125,4 +125,86 @@ class ReviewTests {
         assertEquals(4, updatedReview.getScore());
         assertEquals("2025-Jan-10", updatedReview.getDate());
     }
+
+    @Test
+    void endptDeleteUser() throws Exception {
+
+        //create and save user
+        User user = new User("12345", "testing@mail.com", "testing123");
+        userRepository.save(user);
+
+        //create and save review
+        Review review = new Review();
+        ReviewKey reviewKey = new ReviewKey("12345", 1L);
+        review.setReviewId(reviewKey);
+        review.setUser(userRepository.findById("12345").orElseThrow());
+        review.setProduct(productRepository.findById(1L).orElseThrow());
+        review.setReviewBody("Fits my skin!");
+        review.setScore(5);
+        review.setDate("2025-Apr-04");
+        reviewRepository.save(review);
+
+        //make sure user and review saved
+        assertTrue(userRepository.findById("12345").isPresent(), "User saved");
+        assertTrue(reviewRepository.findById(reviewKey).isPresent(), "Review saved");
+
+        //delete reviews
+        mockMvc.perform(delete("/users/12345/reviews/delete-all"))
+                .andReturn().getResponse();
+
+        //delete user
+        MockHttpServletResponse response = mockMvc.perform(
+                        delete("/users/12345")
+                                .contentType("application/json"))
+                .andReturn().getResponse();
+
+        //final check
+        assertEquals(200, response.getStatus(), "User deleted");
+        assertTrue(userRepository.findById("12345").isEmpty(), "User not found");
+        assertTrue(reviewRepository.findById(reviewKey).isEmpty(), "Review not found");
+    }
+
+    @Test
+    void endptUpdateUser() throws Exception {
+
+        //create and save user
+        User user = new User("12345", "testing@mail.com", "update123");
+        userRepository.save(user);
+
+        //create and save review
+        Review review = new Review();
+        ReviewKey reviewKey = new ReviewKey("12345", 1L);
+        review.setReviewId(reviewKey);
+        review.setUser(userRepository.findById("12345").orElseThrow());
+        review.setProduct(productRepository.findById(1L).orElseThrow());
+        review.setReviewBody("Fits my skin!");
+        review.setScore(5);
+        review.setDate("2025-Apr-04");
+        reviewRepository.save(review);
+
+        //make sure user and review saved
+        assertTrue(userRepository.findById("12345").isPresent(), "User saved");
+        assertTrue(reviewRepository.findById(reviewKey).isPresent(), "Review saved");
+
+        //update user
+        ObjectNode userJson = objectMapper.createObjectNode();
+        userJson.put("newUserId", "54321");
+
+        //update user
+        MockHttpServletResponse response = mockMvc.perform(
+                        put("/users/12345/id")
+                                .contentType("application/json")
+                                .content(userJson.toString()))
+                .andReturn().getResponse();
+
+        //final check
+        assertEquals(200, response.getStatus(), "Done");
+        assertTrue(userRepository.findById("54321").isPresent(), "User not found");
+        assertTrue(userRepository.findById("12345").isEmpty(), "User not found");
+
+        ReviewKey newreviewKey = new ReviewKey("54321", 1L);
+        Review updatedReview = reviewRepository.findById(newreviewKey).orElseThrow();
+        assertEquals("54321", updatedReview.getUser().getUserId(),"User updated");
+    }
+
 }
