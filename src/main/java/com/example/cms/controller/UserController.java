@@ -251,12 +251,22 @@ public class UserController {
     @Transactional
     @DeleteMapping("/users/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") String userId) {
-        if (!userRepository.existsById(userId)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("User with ID " + userId + " not found.");
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
+        //Delete reviews
+        reviewRepository.deleteByUser_UserId(userId);
+
+        //Disconnect Favs from User
+        for (Product product : user.getFavourites()) {
+            product.getUsers().remove(user);
+            productRepository.save(product);
         }
 
-        reviewRepository.deleteByUser_UserId(userId);
+        //Clear the many-to-many relationship to remove join table entries
+        user.getFavourites().clear();
+
+        //Delete user
         userRepository.deleteById(userId);
         return ResponseEntity.ok("User with ID " + userId + " deleted successfully.");
     }
