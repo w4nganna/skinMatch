@@ -84,14 +84,14 @@ public class ReviewController {
                                                @PathVariable String userId) {
         // Validate request body
         if (reviewDto == null) {
-            return ResponseEntity.badRequest().build(); // Return 400 Bad Request if body is missing
+            return ResponseEntity.badRequest().build(); // Return 400 Bad Request if body is missin
         }
 
-        if (!Objects.equals(reviewDto.getUserId(), userId)) {
-            return ResponseEntity.badRequest().build(); // Return 400 Bad Request if userId mismatch
-        } else if (!Objects.equals(reviewDto.getProductId(), productId)) {
-            return ResponseEntity.badRequest().build(); // Return 400 Bad Request if productId mismatch
-        }
+//        if (!Objects.equals(reviewDto.getUserId(), userId)) {
+//            return ResponseEntity.badRequest().build(); // Return 400 Bad Request if userId mismatch
+//        } else if (!Objects.equals(reviewDto.getProductId(), productId)) {
+//            return ResponseEntity.badRequest().build(); // Return 400 Bad Request if productId mismatch
+//        }
 
         ReviewKey reviewKey = new ReviewKey(userId, productId);
 
@@ -126,6 +126,8 @@ public class ReviewController {
         productRepository.save(product);
 
         return ResponseEntity.ok(updatedReview);
+
+
     }
 
     @DeleteMapping("/reviews/{productId}/{userId}")
