@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @CrossOrigin
 @RestController
@@ -78,10 +79,18 @@ public class ReviewController {
 
     //update review
     @PutMapping("/reviews/{productId}/{userId}")
-    public ResponseEntity<Review> updateReview(@RequestBody ReviewDto reviewDto, @PathVariable Long productId, @PathVariable String userId) {
+    public ResponseEntity<Review> updateReview(@RequestBody ReviewDto reviewDto,
+                                               @PathVariable Long productId,
+                                               @PathVariable String userId) {
         // Validate request body
         if (reviewDto == null) {
             return ResponseEntity.badRequest().build(); // Return 400 Bad Request if body is missing
+        }
+
+        if (!Objects.equals(reviewDto.getUserId(), userId)) {
+            return ResponseEntity.badRequest().build(); // Return 400 Bad Request if userId mismatch
+        } else if (!Objects.equals(reviewDto.getProductId(), productId)) {
+            return ResponseEntity.badRequest().build(); // Return 400 Bad Request if productId mismatch
         }
 
         ReviewKey reviewKey = new ReviewKey(userId, productId);

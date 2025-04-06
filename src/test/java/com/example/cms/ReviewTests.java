@@ -18,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -270,8 +271,7 @@ class EnhancedReviewTests {
 
     @Test
     void testDeleteNonExistentReview() throws Exception {
-        // Instead of trying to delete a non-existent review via repository directly,
-        // which throws an exception, just create an ID that's unlikely to exist
+        // Create IDs that are unlikely to exist
         String userId = "NON_EXISTENT_USER_ID";
         Long productId = 999999L;
 
@@ -279,20 +279,20 @@ class EnhancedReviewTests {
         ReviewKey reviewKey = new ReviewKey(userId, productId);
         assertFalse(reviewRepository.existsById(reviewKey), "Test precondition: Review should not exist before test");
 
-        // Your controller might still throw an exception if it's not handling
-        // the non-existent case, so we need to wrap this in a try-catch
-        try {
-            MockHttpServletResponse response = mockMvc.perform(
-                            delete("/reviews/" + productId + "/" + userId))
-                    .andReturn().getResponse();
+        // Expect an EmptyResultDataAccessException to be thrown
+        assertThrows(NestedServletException.class, () -> {
+            mockMvc.perform(delete("/reviews/" + productId + "/" + userId));
+        }, "Deleting a non-existent review should throw an exception");
 
-            // If we get here, the controller didn't throw an exception
-            // It should return 200 as deleting a non-existent resource is idempotent
-            assertEquals(200, response.getStatus());
-        } catch (Exception e) {
-            // If your controller doesn't handle non-existent reviews gracefully,
-            // you'll need to refactor the controller or adjust the expected behavior
-            fail("Controller should handle deleting non-existent reviews without throwing exceptions: " + e.getMessage());
+        // If we want to verify the specific cause of the exception (EmptyResultDataAccessException)
+        try {
+            mockMvc.perform(delete("/reviews/" + productId + "/" + userId));
+            fail("Expected exception was not thrown");
+        } catch (NestedServletException e) {
+            assertTrue(e.getCause() instanceof EmptyResultDataAccessException,
+                    "The root cause should be EmptyResultDataAccessException");
+            assertTrue(e.getCause().getMessage().contains("No class com.example.cms.model.entity.Review entity with id"),
+                    "Exception message should indicate the review doesn't exist");
         }
     }
 
