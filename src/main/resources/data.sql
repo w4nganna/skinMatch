@@ -5,7 +5,7 @@
 
 ----------------User-----------------
 INSERT INTO users(userId, email, password) VALUES('00001', 'jialuo.chen@mail.utoronto.ca', '1111');
-INSERT INTO users(userId, email, password) VALUES('00002', 'lea.kwon@mail.utoronto.ca', '1234');
+INSERT INTO users(userId, email, password) VALUES('00002', 'lea.kwon@mail.utoronto.ca', '2222');
 INSERT INTO users(userId, email, password) VALUES('00003', 'karuna.adhikari@mail.utoronto.ca', '3333');
 INSERT INTO users(userId, email, password) VALUES('00004', 'pragya.prakash@mail.utoronto.ca', '4444');
 INSERT INTO users(userId, email, password) VALUES('00005', 'anoushka.paul@mail.utoronto.ca', '5555');

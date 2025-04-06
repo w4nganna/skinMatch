@@ -58,9 +58,8 @@ class UserTests {
         User user = new User("00002", "delete.me@mail.com", "delete123");
         userRepository.save(user);
 
-        // Ensure dependent records are deleted before removing the user
-        mockMvc.perform(delete("/users/00002/reviews/delete-all"))
-                .andReturn().getResponse();
+        //make sure user saved
+        assertTrue(userRepository.findById("00002").isPresent(), "User saved");
 
         // Now delete the user
         MockHttpServletResponse response = mockMvc.perform(

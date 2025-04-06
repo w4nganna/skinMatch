@@ -866,4 +866,89 @@ class QuizResultsTests {
                 )
                 .andExpect(status().isOk());
     }
+
+    @Test
+    @Transactional
+    void testNoConcernsSelected() throws Exception {
+        // Create a unique user and test data
+        String userId = "user-no-concerns-test";
+        TestResultsDto testResultsDto = createTestUserAndData(userId, 100.0f); // Example with a medium budget
+
+        // Set an empty list for concerns (no concerns selected)
+        testResultsDto.setConcerns(new ArrayList<>());
+
+        // First create a test result with no concerns
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/test-results")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(testResultsDto))
+                )
+                .andExpect(status().isOk());
+
+        // Get recommended products
+        MockHttpServletResponse response = mockMvc.perform(
+                        MockMvcRequestBuilders.get("/test-results/users/" + userId + "/recommendations")
+                )
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        // Parse response
+        List<ProductDto> recommendations = objectMapper.readValue(
+                response.getContentAsString(),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, ProductDto.class)
+        );
+
+        // Verify that the response is not empty
+        assertFalse(recommendations.isEmpty(), "Should recommend products even when no concerns are selected");
+    }
+
+    @Test
+    @Transactional
+    void testAllIngredientsAvoided() throws Exception {
+        // Create a unique user and test data
+        String userId = "user-all-ingredients-avoided-test";
+        TestResultsDto testResultsDto = createTestUserAndData(userId, 100.0f); // Example with a medium budget
+
+        // Fetch all ingredients from the repository
+        List<Ingredient> allIngredients = ingredientRepository.findAll();
+        if (allIngredients.isEmpty()) {
+            throw new RuntimeException("Test requires at least one ingredient in the database");
+        }
+
+        // Extract ingredient IDs from the list of ingredients
+        List<Long> allIngredientIds = allIngredients.stream()
+                .map(Ingredient::getIngredientId)
+                .collect(Collectors.toList());
+
+        // Set the list of avoided ingredients to all available ingredient IDs
+        testResultsDto.setAvoidIngredients(allIngredientIds);
+
+        // First create a test result with all ingredients avoided
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/test-results")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(testResultsDto))
+                )
+                .andExpect(status().isOk());
+
+        // Get recommended products
+        MockHttpServletResponse response = mockMvc.perform(
+                        MockMvcRequestBuilders.get("/test-results/users/" + userId + "/recommendations")
+                )
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        // Parse response
+        List<ProductDto> recommendations = objectMapper.readValue(
+                response.getContentAsString(),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, ProductDto.class)
+        );
+
+        // Verify that the recommendation list is empty since all ingredients are avoided
+        assertTrue(recommendations.isEmpty(), "Should return an empty list when all ingredients are avoided");
+    }
+
+
 }
