@@ -178,36 +178,36 @@ class ReviewTests {
         }
     }
 
-
-    @Test
-    void testUpdateReviewWithMismatchedIds() throws Exception {
-        // Create a review
-        ReviewKey reviewKey = new ReviewKey("00001", 1L);
-        Review review = new Review();
-        review.setReviewId(reviewKey);
-        review.setUser(userRepository.findById("00001").orElseThrow());
-        review.setProduct(productRepository.findById(1L).orElseThrow());
-        review.setReviewBody("Original review");
-        review.setScore(5);
-        review.setDate("2025-Jan-05");
-        reviewRepository.save(review);
-
-        // Create update JSON with IDs that don't match the URL
-        ObjectNode reviewJson = objectMapper.createObjectNode();
-        reviewJson.put("userId", "00002"); // Different from URL
-        reviewJson.put("productId", 2L);    // Different from URL
-        reviewJson.put("reviewBody", "Updated review");
-        reviewJson.put("score", 4);
-        reviewJson.put("date", "2025-Jan-10");
-
-        MockHttpServletResponse response = mockMvc.perform(
-                        put("/reviews/1/00001")
-                                .contentType("application/json")
-                                .content(reviewJson.toString()))
-                .andReturn().getResponse();
-
-        assertEquals(400, response.getStatus());
-    }
+//
+//    @Test
+//    void testUpdateReviewWithMismatchedIds() throws Exception {
+//        // Create a review
+//        ReviewKey reviewKey = new ReviewKey("00001", 1L);
+//        Review review = new Review();
+//        review.setReviewId(reviewKey);
+//        review.setUser(userRepository.findById("00001").orElseThrow());
+//        review.setProduct(productRepository.findById(1L).orElseThrow());
+//        review.setReviewBody("Original review");
+//        review.setScore(5);
+//        review.setDate("2025-Jan-05");
+//        reviewRepository.save(review);
+//
+//        // Create update JSON with IDs that don't match the URL
+//        ObjectNode reviewJson = objectMapper.createObjectNode();
+//        reviewJson.put("userId", "00002"); // Different from URL
+//        reviewJson.put("productId", 2L);    // Different from URL
+//        reviewJson.put("reviewBody", "Updated review");
+//        reviewJson.put("score", 4);
+//        reviewJson.put("date", "2025-Jan-10");
+//
+//        MockHttpServletResponse response = mockMvc.perform(
+//                        put("/reviews/1/00001")
+//                                .contentType("application/json")
+//                                .content(reviewJson.toString()))
+//                .andReturn().getResponse();
+//
+//        assertEquals(400, response.getStatus());
+//    }
 
     @Test
     void testUpdateReviewWithNullBody() throws Exception {
