@@ -112,18 +112,18 @@ public class ProductController {
     }
 
     //------------Product search method II: SQL filter-----------
-    @GetMapping("/products/filterII")
-    public List<ProductDto> getFilteredProductsII(
-            @RequestParam(required = false) Double maxPrice,
-            @RequestParam(required = false) String sortBy,
-            @RequestParam(required = false) Integer category,
-            @RequestParam(required = false)
-            List<String> brands,
-            @RequestParam(required = false) List<String> types,
-            @RequestParam(required = false) List<Long> avoidIngredients,
-            @RequestParam(required = false) List<Integer> concerns) {
-        return productSearchService.getFilteredProductsII(maxPrice, sortBy, category, brands, types, avoidIngredients, concerns);
-    }
+//    @GetMapping("/products/filterII")
+//    public List<ProductDto> getFilteredProductsII(
+//            @RequestParam(required = false) Double maxPrice,
+//            @RequestParam(required = false) String sortBy,
+//            @RequestParam(required = false) Integer category,
+//            @RequestParam(required = false)
+//            List<String> brands,
+//            @RequestParam(required = false) List<String> types,
+//            @RequestParam(required = false) List<Long> avoidIngredients,
+//            @RequestParam(required = false) List<Integer> concerns) {
+//        return productSearchService.getFilteredProductsII(maxPrice, sortBy, category, brands, types, avoidIngredients, concerns);
+//    }
 
 
 

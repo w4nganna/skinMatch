@@ -66,32 +66,32 @@ public class ProductSearchService {
                 //Collect the results into a list
                 .collect(Collectors.toList());
     }
-
     //------------Product search method II: SQL filter-----------
-    public List<ProductDto> getFilteredProductsII(
-            Double maxPrice, String sortBy, Integer category,
-            List<String> brands, List<String> types, List<Long> avoidIngredients, List<Integer> concerns) {
+//    public List<ProductDto> getFilteredProductsII(
+//            Double maxPrice, String sortBy, Integer category,
+//            List<String> brands, List<String> types, List<Long> avoidIngredients, List<Integer> concerns) {
+//
+//        //Call repository method to filter via SQL
+//        List<Product> products = productRepository.findFilteredProducts(
+//                maxPrice, brands, category, types, concerns, avoidIngredients, sortBy
+//        );
+//
+//        //Convert each Product entity to a ProductDto
+//        return products.stream()
+//                .map(product -> {
+//                    product.setAverageScore(productRepository.findAverageScoreByProductId(product.getProductId()));
+//                    return new ProductDto(
+//                            product.getProductId(),
+//                            product.getName(),
+//                            product.getBrand(),
+//                            product.getPrice(),
+//                            product.getImageURL(),
+//                            product.getIngredients(),
+//                            product.getAverageScore()
+//                    );
+//                })
+//                //Create list
+//                .collect(Collectors.toList());
+//    }
 
-        //Call repository method to filter via SQL
-        List<Product> products = productRepository.findFilteredProducts(
-                maxPrice, brands, category, types, concerns, avoidIngredients, sortBy
-        );
-
-        //Convert each Product entity to a ProductDto
-        return products.stream()
-                .map(product -> {
-                    product.setAverageScore(productRepository.findAverageScoreByProductId(product.getProductId()));
-                    return new ProductDto(
-                            product.getProductId(),
-                            product.getName(),
-                            product.getBrand(),
-                            product.getPrice(),
-                            product.getImageURL(),
-                            product.getIngredients(),
-                            product.getAverageScore()
-                    );
-                })
-                //Create list
-                .collect(Collectors.toList());
-    }
 }
