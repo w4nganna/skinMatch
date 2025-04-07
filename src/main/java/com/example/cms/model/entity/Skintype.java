@@ -31,10 +31,9 @@ public class Skintype {
     // Many-to-Many relationship with Product
     @ManyToMany(mappedBy = "skintypes")
     @JsonIgnore
-    private List<Product> products  = new ArrayList<>();
+    private List<Product> products = new ArrayList<>();
 
-    public Skintype(int id, String description)
-    {
+    public Skintype(int id, String description) {
         this.skintypeId = id;
         this.description = description;
     }
