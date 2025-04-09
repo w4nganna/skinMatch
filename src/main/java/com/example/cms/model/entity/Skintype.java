@@ -1,5 +1,6 @@
 package com.example.cms.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,10 +30,10 @@ public class Skintype {
 
     // Many-to-Many relationship with Product
     @ManyToMany(mappedBy = "skintypes")
-    private List<Product> products  = new ArrayList<>();
+    @JsonIgnore
+    private List<Product> products = new ArrayList<>();
 
-    public Skintype(int id, String description)
-    {
+    public Skintype(int id, String description) {
         this.skintypeId = id;
         this.description = description;
     }

@@ -1,9 +1,12 @@
 package com.example.cms.controller;
 
+import com.example.cms.controller.Dto.ProductDto;
 import com.example.cms.controller.Dto.UserDto;
+import com.example.cms.controller.exceptions.ProductNotFoundException;
 import com.example.cms.controller.exceptions.UserNotFoundException;
-import com.example.cms.model.entity.TestResults;
-import com.example.cms.model.entity.User;
+import com.example.cms.model.entity.*;
+import com.example.cms.model.repository.ProductRepository;
+import com.example.cms.model.repository.ReviewRepository;
 import com.example.cms.model.repository.TestResultsRepository;
 import com.example.cms.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -21,11 +26,16 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final TestResultsRepository testResultsRepository;
+    private final ProductRepository productRepository;
+    private final ReviewRepository reviewRepository;
+
 
     @Autowired
-    public UserController(TestResultsRepository testResultsRepository, UserRepository userRepository) {
+    public UserController(TestResultsRepository testResultsRepository, UserRepository userRepository, ProductRepository productRepository, ReviewRepository reviewRepository) {
         this.testResultsRepository = testResultsRepository;
         this.userRepository = userRepository;
+        this.productRepository = productRepository;
+        this.reviewRepository = reviewRepository;
     }
     //-------------------Get------------------
     @GetMapping("/users")
@@ -50,6 +60,31 @@ public class UserController {
     @GetMapping("/signup/email/{email}")
     public ResponseEntity<Boolean> isEmailUnique(@PathVariable String email) {
         return ResponseEntity.ok(!userRepository.emailExists(email));
+    }
+
+    @GetMapping("/users/{userId}/favs")
+    public Set<ProductDto> getFavProds(@PathVariable String userId) {
+        User user = userRepository.findByIdWithFavourites(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
+        return user.getFavourites().stream()
+                .map(product -> {
+                    // 🔄 Calculate and set the average score
+                    Double avgScore = reviewRepository.findAverageScoreByProductId(product.getProductId());
+                    product.setAverageScore(avgScore);
+
+
+                    return new ProductDto(
+                            product.getProductId(),
+                            product.getName(),
+                            product.getBrand(),
+                            product.getPrice(),
+                            product.getImageURL(),
+                            product.getIngredients(),
+                            product.getAverageScore()
+                    );
+                })
+                .collect(Collectors.toSet());
     }
 
     //-------------------Put------------------
@@ -85,7 +120,6 @@ public class UserController {
                 })
                 .orElseGet(() -> ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
-                        //Return 404 with message
                         .body("User with ID " + userId + " not found."));
     }
 
@@ -93,47 +127,113 @@ public class UserController {
     @PutMapping("/users/{userId}/id")
     @Transactional
     public ResponseEntity<String> updateUserId(@PathVariable("userId") String oldUserId, @RequestBody Map<String, String> requestBody) {
-        // Get new userId from request body
         String newUserId = requestBody.get("newUserId");
         if (newUserId == null || newUserId.isEmpty()) {
             return ResponseEntity.badRequest().body("New userId is required.");
         }
 
-        // Check if the new user ID already exists in the repository
         if (userRepository.existsById(newUserId)) {
             return ResponseEntity.badRequest().body("New userId already exists.");
         }
 
-        // Create new user with old user information
         return userRepository.findById(oldUserId).map(oldUser -> {
-            // Get the test results linked to the old user
-            TestResults testResults = oldUser.getTestResults();
-
-            // Create a new user with the same details
+            // Clone old user into new user
             User newUser = new User(newUserId, oldUser.getEmail(), oldUser.getPassword());
 
-            // Save the new user first
-            userRepository.save(newUser);
+            // Save new user before linking test results
+            userRepository.saveAndFlush(newUser);
 
-            // If test results exist, update their user reference
+            // Step 2: Reassign TestResults
+            TestResults testResults = oldUser.getTestResults();
             if (testResults != null) {
-                // Set the test results to reference the new user and vice versa
+                // Unlink from old user
+                oldUser.setTestResults(null);
+                userRepository.saveAndFlush(oldUser);
+
+                // Re-link to new user
                 testResults.setUser(newUser);
                 newUser.setTestResults(testResults);
-
-                // Set old user repository as null
-                oldUser.setTestResults(null);
-
-                // Save the updated test results and user
-                testResultsRepository.save(testResults);
-                userRepository.save(newUser);
+                testResultsRepository.saveAndFlush(testResults);
             }
 
-            // Delete the old user after saving the new user and updating the test results
+            // Migrate reviews
+            List<Review> oldReviews = reviewRepository.findByUser_UserId(oldUserId);
+            for (Review review : oldReviews) {
+                ReviewKey newKey = new ReviewKey(newUserId, review.getProduct().getProductId());
+
+                Review newReview = new Review();
+                newReview.setReviewId(newKey);
+                newReview.setUser(newUser);
+                newReview.setProduct(review.getProduct());
+                newReview.setDate(review.getDate());
+                newReview.setScore(review.getScore());
+                newReview.setReviewBody(review.getReviewBody());
+
+                reviewRepository.save(newReview);
+                reviewRepository.delete(review);
+            }
+
+            //Migrate Favs
+            Set<Product> oldFavourites = Set.copyOf(oldUser.getFavourites());
+
+            for (Product product : oldFavourites) {
+                product.getUsers().remove(oldUser);
+                product.getUsers().add(newUser);
+                productRepository.save(product);
+            }
+            newUser.setFavourites(oldFavourites);
+
+            userRepository.saveAndFlush(newUser);
+
+            // Step 6: Delete old user
             userRepository.delete(oldUser);
 
             return ResponseEntity.ok("UserId updated successfully.");
         }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+
+
+    //Add or delete favourite product
+    @PutMapping("/users/{userId}/favs/{productId}")
+    public ResponseEntity<String> updateFavProds(@PathVariable("userId") String userId, @PathVariable("productId") Long productId) {
+        //Find user
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+        //Find product
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+
+        //Remove if already favourited
+        if (user.getFavourites().contains(product)) {
+            //update user
+            user.getFavourites().remove(product);
+            userRepository.save(user);
+            //update product
+            product.getUsers().remove(user);
+            productRepository.save(product);
+            return ResponseEntity.ok("Product removed from favourites.");
+        //Add if not favourited
+        } else {
+            //update user
+            user.getFavourites().add(product);
+            userRepository.save(user);
+            //update product
+            product.getUsers().add(user);
+            productRepository.save(product);
+            return ResponseEntity.ok("Product added to favourites.");
+        }
+    }
+
+    //Clear favourite list
+    @PutMapping("users/{userId}/favs/clear")
+    public ResponseEntity<String> clearFavProds(@PathVariable("userId") String userId) {
+        //Find user
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+        user.getFavourites().clear();
+        userRepository.save(user);
+        return ResponseEntity.ok("Favourites cleared.");
     }
 
     //-------------------Post------------------
@@ -148,16 +248,26 @@ public class UserController {
     }
 
     //-------------------Delete------------------
+    @Transactional
     @DeleteMapping("/users/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") String userId) {
-        if (!userRepository.existsById(userId)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("User with ID " + userId + " not found.");
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
+        //Delete reviews
+        reviewRepository.deleteByUser_UserId(userId);
+
+        //Disconnect Favs from User
+        for (Product product : user.getFavourites()) {
+            product.getUsers().remove(user);
+            productRepository.save(product);
         }
 
+        //Clear the many-to-many relationship to remove join table entries
+        user.getFavourites().clear();
+
+        //Delete user
         userRepository.deleteById(userId);
         return ResponseEntity.ok("User with ID " + userId + " deleted successfully.");
     }
-
-
 }

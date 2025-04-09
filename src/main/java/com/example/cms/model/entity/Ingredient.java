@@ -17,11 +17,14 @@ import java.util.List;
 @Table(name = "ingredients")
 public class Ingredient{
     @Id
-    @NotEmpty
+//    @NotEmpty
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ingredientId;
 
     @NotEmpty
     private String ingredientName;
+
+    private String body;
 
     //Many-to-Many relationship with Products
     @ManyToMany(mappedBy = "ingredients")
@@ -32,5 +35,7 @@ public class Ingredient{
     @ManyToMany(mappedBy = "avoidIngredients")
     @JsonIgnore
     private List<TestResults> testResults  = new ArrayList<>();
+
+
 
 }

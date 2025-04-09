@@ -2,6 +2,7 @@ package com.example.cms.model.repository;
 
 import com.example.cms.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -34,5 +35,8 @@ public interface UserRepository extends JpaRepository<User, String> {
     // Check if a user with the same email exists
     @Query(value = "SELECT COUNT(*) > 0 FROM users WHERE email = :email", nativeQuery = true)
     Boolean emailExists(@Param("email") String email);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.favourites WHERE u.userId = :userId")
+    Optional<User> findByIdWithFavourites(@Param("userId") String userId);
 
 }

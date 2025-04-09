@@ -11,9 +11,10 @@ import java.util.List;
 @Getter
 @Setter
 public class TestResultsDto {
+//    private Long testResultId;
     private Float budget;
     private Integer skinType;
     private List<Long> avoidIngredients;
-    //private List<Concern> concerns;
+    private List<Integer> concerns;
     private String user;
 }
